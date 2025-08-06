@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Stable Cinemetrics</title>
+  <meta name="description" content="Stable Cinemetrics: Structured Taxonomy and Evaluation for Professional Video Generation">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.png">
+
+  <!-- Fonts and Icons -->
+  <!-- Load Inter with 800 so only the leading phrase can be bolded cleanly -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+
+  <!-- Bulma CSS Framework -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+  <!-- Your site CSS (keep this before inline <style> so inline can override) -->
+  <link rel="stylesheet" href="index.css">
+
+  <!-- Swiper.js for Carousel -->
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+  <style>
+    :root {
+      --bulma-link-h-l: 21;
+      --bulma-link-s-l: 71;
+    }
+    
+    /* Wider taxonomy box only */
+.hero.teaser .container {
+  max-width: min(92vw, 1400px);   /* was ~980px via is-max-desktop */
+}
+
+@media (max-width: 1280px) {
+  .hero.teaser .container {
+    max-width: min(95vw, 1080px);
+  }
+}
+
+/* Make the bordered slide stretch nicely in the wider container */
+.hero.teaser .mySwiper .swiper-slide {
+  width: 100%;
+  padding: 18px 22px;             /* optional: a little breathing room */
+}
+
+
+    /* --- Taxonomy Tabs: pill segmented control --- */
+.taxonomy-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0;                     /* contiguous pills */
+  margin: 1.25rem 0 0.75rem;
+}
+
+.taxonomy-tab {
+  appearance: none;
+  border: 1px solid #d6d6d6;
+  background: #ffffff;
+  color: #333;
+  font-weight: 600;
+  font-size: 0.95rem;         /* bigger text */
+  letter-spacing: .2px;
+  padding: .55rem 1.15rem;    /* bigger hit area */
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease, box-shadow .15s ease, border-color .15s ease;
+  line-height: 1;
+  user-select: none;
+}
+
+/* make them a single rounded pill group */
+.taxonomy-tab:first-child { border-radius: 9999px 0 0 9999px; }
+.taxonomy-tab:last-child  { border-radius: 0 9999px 9999px 0; }
+.taxonomy-tab + .taxonomy-tab { margin-left: -1px; } /* collapse shared borders */
+
+/* hover / focus aesthetics */
+.taxonomy-tab:hover {
+  background: #f6f8ff;
+  border-color: #c7d2fe;
+}
+.taxonomy-tab:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(50,115,220,.25);
+  border-color: #3273dc;
+}
+
+/* active (selected) */
+.taxonomy-tab.is-active,
+.taxonomy-tab[aria-selected="true"] {
+  background: linear-gradient(180deg, #3d7bfd 0%, #2f66e1 100%);
+  color: #fff;
+  border-color: #2f66e1;
+  box-shadow: 0 6px 14px rgba(47,102,225,.18), inset 0 0 0 1px rgba(255,255,255,.25);
+}
+
+/* subtle disabled look (if you ever need it) */
+.taxonomy-tab:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+/* Hide default Swiper arrows on taxonomy carousel */
+.hero.teaser .swiper-button-prev,
+.hero.teaser .swiper-button-next { display: none !important; }
+
+
+
+    /* --- Title typography: only "Stable Cinemetrics" is bold --- */
+    .title.is-1.publication-title {
+      font-weight: 400 !important;
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    .scine-title { font-weight: 800 !important; }
+    .scine-subtitle { font-weight: 400 !important; color: #3b3b3b; }
+
+    /* Author / affiliation line */
+    .author-line, .affil-line { margin-top: .75rem; }
+    .author-line { font-size: 1.05rem; color: #2f2f2f; }
+    .author-line a { color: #2f2f2f; text-decoration: none; }
+    .author-line a:hover { text-decoration: underline; }
+    .author-line .sep { margin: 0 .5rem; opacity: .5; }
+    .sup { vertical-align: super; font-size: .65em; margin-left: .15em; }
+    .affil-line { color: #555; font-size: .95rem; }
+    .affil-line .bullet { margin: 0 .6rem; opacity: .5; }
+
+    /* Base typography / canvas */
+    body {
+      background: #f5f5f7;
+      line-height: 1.6;
+      font-family: 'Noto Sans', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    .hero .title,
+    .publication-title,
+    .publication-authors {
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    /* White "card" sections */
+    .section-box {
+      background: #ffffff;
+      max-width: 980px;
+      margin: 4rem auto;
+      padding: 3rem 4rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    }
+
+   .hero.teaser .tree-controls {
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      z-index: 10;
+      background: rgba(255,255,255,.95);
+      border-radius: 10px;
+      padding: 4px;
+      box-shadow: 0 3px 10px rgba(0,0,0,.08);
+      display: inline-flex;
+      gap: .5rem;
+    }
+  .hero.teaser .btn-tax { padding: .3rem .6rem; }   
+
+  .btn-tax{
+    background:#fff; border:1px solid #d9d9d9; border-radius:8px;
+    padding:.35rem .7rem; font-size:.9rem; font-weight:600; cursor:pointer;
+    transition:box-shadow .15s ease,border-color .15s ease,background .15s ease;
+  }
+  .btn-tax:hover{ border-color:#b9c7ff; box-shadow:0 3px 10px rgba(50,115,220,.12); }
+  .btn-expand{ background:linear-gradient(180deg,#3d7bfd,#2f66e1); color:#fff; border-color:#2f66e1; }
+
+
+    .publication-authors { margin: 1rem auto; }
+    .publication-venue { color: #555; font-size: 1rem; font-weight: 700; }
+    .section { padding: 3rem 1.5rem; }
+    .hero.teaser { background-color: #f5f5f5; }
+    .hero .subtitle { color: #555; }
+    .content p { line-height: 1.5; }
+
+    /* Swiper slides: keep bordered card look (do not remove) */
+    .swiper-slide {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      box-sizing: border-box;
+    }
+
+    /* Make ONLY the taxonomy swiper taller, responsive */   
+    .hero.teaser .mySwiper .swiper-slide{
+      position: relative;   /* <-- anchors .tree-controls to the slide */
+      overflow: hidden;     /* <-- clip any SVG bleed into adjacent slides */
+      width: 100%;
+      padding: 18px 22px;
+       min-height: auto;
+    }
+
+    .graph-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #363636;
+      margin-bottom: 10px;
+      text-align: center;
+      flex: 0 0 auto;
+    }
+
+    /* Let the tree container fill the rest of the slide.
+       Also ensure non-zero height so D3 can compute sizes. */
+    .hero.teaser .tree-container-wrapper {
+      position: relative;
+      overflow: auto;
+      padding-top: 36px;
+      height: auto;
+      padding-left: 24px; 
+      min-height: 0;
+      scrollbar-gutter: stable both-edges;
+    }
+
+    .tax-scroll-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 1px solid #d9d9d9;
+      background: rgba(255,255,255,.95);
+      border-radius: 9999px;
+      padding: .35rem .55rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0,0,0,.08);
+      z-index: 5;
+    }
+
+    .tax-scroll-btn.left  { left: 8px; }
+    .tax-scroll-btn.right { right: 8px; }
+    .tax-scroll-btn[hidden] { display: none; }
+
+    /* SVG should stretch to wrapper */
+    .hero.teaser .tree-svg {
+  /* Let the JS pixel attributes control size */
+  width: auto !important;
+  height: auto !important;
+  display: block;
+}
+
+    .link {
+      fill: none;
+      stroke: #ccc;
+      stroke-width: 2px;
+    }
+
+    .node circle {
+      stroke: steelblue;
+      stroke-width: 3px;
+      cursor: pointer;
+      fill: #fff;
+    }
+
+    .node text {
+      font: 12px sans-serif;
+      cursor: pointer;
+    }
+
+    .toggle-text {
+      font-size: 12px;
+      fill: #2563eb;
+      cursor: pointer;
+      text-anchor: start;
+      text-decoration: underline;
+    }
+
+    .tooltip {
+      position: fixed;
+      visibility: hidden;
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+      font-size: 12px;
+      color: #333;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+      max-width: 260px;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    /* Swiper Navigation Buttons */
+    .swiper-button-prev, .swiper-button-next {
+      color: #333;
+    }
+
+    /* Other swipers (figures/videos) remain unboxed */
+    .human-eval-swiper .swiper-slide,
+    .video-results-swiper .swiper-slide {
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      height: auto;
+    }
+    .human-eval-swiper .caption,
+    .video-results-swiper .caption {
+      margin-top: 0.5rem;
+      font-style: italic;
+      color: #555;
+    }
+    .video-results-swiper video {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    /* Captions polish */
+    .caption--simple { margin-top: .25rem; font-weight: 600; }
+    .caption--breadcrumb { margin-top: .1rem; font-size: .9rem; color: #777; }
+    .caption--breadcrumb .divider { margin: 0 .35rem; opacity: .6; }
+  </style>
+</head>
+<body>
+
+  <!-- HERO HEADER -->
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+
+            <!-- Title: only leading phrase is bold -->
+            <h1 class="title is-1 publication-title">
+              <span class="scine-title">Stable Cinemetrics</span>
+              <span class="scine-subtitle">: Structured Taxonomy and Evaluation for Professional Video Generation</span>
+            </h1>
+
+            <!-- Authors (clean separators, tight superscripts) -->
+            <div class="author-line">
+              <a href="https://agneetchatterjee.com/" target="_blank">Agneet Chatterjee</a><span class="sup">1,2</span>
+              <span class="sep">·</span>
+              <a href="https://rahimentezari.github.io/" target="_blank">Rahim Entezari</a><span class="sup">1</span>
+              <span class="sep">·</span>
+              <a href="https://scholar.google.com/citations?user=BLXPkDEAAAAJ&hl=en" target="_blank">Maksym Zhuravinskyi</a><span class="sup">1</span>
+              <span class="sep">·</span>
+              <a href="https://scholar.google.com/citations?user=axpNZUAAAAAJ&hl=en" target="_blank">Max Lapin</a><span class="sup">1</span>
+              <span class="sep">·</span>
+              <a href="https://reshinthadithyan.github.io/" target="_blank">Reshinth Adithyan</a><span class="sup">1</span>
+              <span class="sep">·</span>
+              <a href="https://scholar.google.com/citations?user=JVumcGEAAAAJ&hl=en" target="_blank">Amit Raj</a><span class="sup">3</span>
+              <span class="sep">·</span>
+              <a href="https://www.public.asu.edu/~cbaral/" target="_blank">Chitta Baral</a><span class="sup">2</span>
+              <span class="sep">·</span>
+              <a href="https://yezhouyang.engineering.asu.edu/" target="_blank">Yezhou Yang</a><span class="sup">2</span>
+              <span class="sep">·</span>
+              <a href="https://varunjampani.github.io" target="_blank">Varun Jampani</a><span class="sup">1</span>
+            </div>
+
+            <!-- Affiliations on one line -->
+            <div class="affil-line">
+              <span class="sup">1</span> Stability AI
+              <span class="bullet">•</span>
+              <span class="sup">2</span> Arizona State University
+              <span class="bullet">•</span>
+              <span class="sup">3</span> Google DeepMind
+            </div>
+
+            <br>
+            <span class="link-block"><a href="#" class="button is-normal is-rounded is-dark"><span class="icon"><i class="ai ai-arxiv"></i></span><span>Paper</span></a></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HERO TEASER (Taxonomies) -->
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <h4 class="title is-4 has-text-centered">
+          <em>Structured taxonomies at the intersection of Generative Video Models and Professional Use, built on the principles of cinematic control.</em>
+        </h4>
+        <div class="taxonomy-tabs has-text-centered" role="tablist" aria-label="Taxonomies">
+  <button class="taxonomy-tab" role="tab" aria-selected="true"  data-slide="0">Camera</button>
+  <button class="taxonomy-tab" role="tab" aria-selected="false" data-slide="1">Lighting</button>
+  <button class="taxonomy-tab" role="tab" aria-selected="false" data-slide="2">Setup</button>
+  <button class="taxonomy-tab" role="tab" aria-selected="false" data-slide="3">Events</button>
+</div>
+
+
+        <!-- ===== Carousel starts ===== -->
+        <div class="swiper mySwiper">
+          <div class="swiper-wrapper">
+            <!-- Slide 2: Camera Graph -->
+            <div class="swiper-slide">
+              <h3 class="graph-title"></h3>
+              <div class="tree-controls">
+  <button class="btn-tax btn-collapse" data-target="tree-container-2">Collapse</button>
+  <button class="btn-tax btn-expand"  data-target="tree-container-2">Expand</button>
+</div>
+<div class="tree-container-wrapper">
+  <svg id="tree-container-2" class="tree-svg"></svg>
+</div>
+            </div>
+            <!-- Slide 3: Lighting Graph -->
+            <div class="swiper-slide">
+              <h3 class="graph-title"></h3>
+              <div class="tree-controls">
+  <button class="btn-tax btn-collapse" data-target="tree-container-3">Collapse</button>
+  <button class="btn-tax btn-expand"  data-target="tree-container-3">Expand</button>
+</div>
+<div class="tree-container-wrapper">
+  <svg id="tree-container-3" class="tree-svg"></svg>
+</div>
+            </div>
+            <!-- Slide 1: Setup Graph -->
+            <div class="swiper-slide">
+              <h3 class="graph-title"></h3>
+              <div class="tree-controls">
+  <button class="btn-tax btn-collapse" data-target="tree-container-1">Collapse</button>
+  <button class="btn-tax btn-expand"  data-target="tree-container-1">Expand</button>
+</div>
+<div class="tree-container-wrapper">
+  <svg id="tree-container-1" class="tree-svg"></svg>
+</div>
+            </div>
+
+            <!-- Slide 4: Events Graph -->
+            <div class="swiper-slide">
+              <h3 class="graph-title"></h3>
+              <div class="tree-controls">
+  <button class="btn-tax btn-collapse" data-target="tree-container-4">Collapse</button>
+  <button class="btn-tax btn-expand"  data-target="tree-container-4">Expand</button>
+</div>
+<div class="tree-container-wrapper">
+  <svg id="tree-container-4" class="tree-svg"></svg>
+</div>
+
+            </div>
+          </div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
+        </div>
+        <!-- ===== Carousel ends ===== -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Paper abstract -->
+  <section class="section section-box" id="abstract">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>Recent advances in video generation have enabled high-fidelity video synthesis from user provided prompts. However, existing models and benchmarks fail to capture the complexity and requirements of professional video generation. Towards that goal, we introduce Stable Cinemetrics, a structured evaluation framework that formalizes filmmaking controls into four disentangled, hierarchical taxonomies: Setup, Event, Lighting, and Camera. Together, these taxonomies define 76 fine-grained control nodes grounded in industry practices. Using these taxonomies, we construct a benchmark of prompts aligned with professional use cases and develop an automated pipeline for prompt categorization and question generation, enabling independent evaluation of each control dimension. We conduct a large-scale human study spanning 10+ models and 20K videos, annotated by a pool of 80+ film professionals. Our analysis, both coarse and fine-grained reveal that even the strongest current models exhibit significant gaps, particularly in Events and Camera-related controls. To enable scalable evaluation, we train an automatic evaluator, a vision-language model aligned with expert annotations that outperforms existing zero-shot baselines. SCINE is the first approach to situate professional video generation within the landscape of video generative models, introducing taxonomies centered around cinematic controls and supporting them with structured evaluation pipelines and detailed analyses to guide future research.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benchmark -->
+  <section class="section section-box" id="benchmark">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths has-text-centered">
+          <h2 class="title is-3">The Stable Cinemetrics Benchmark</h2>
+          <div class="content has-text-justified">
+            <p>Mirroring real world professional workflows, we develop SCINE Scripts and Visuals, which are created by sampling control nodes from the proposed taxonomies.</p>
+          </div>
+          <div class="column">
+            <img src="static/images/overall_pipeline.png" alt="Overall Pipeline" loading="lazy">
+          </div>
+          <div class="content has-text-justified">
+            <p>Each control node in SCINE prompts are categorized and, individual questions for each nodes are generated, allowing for isolated and independent evaluation into each cinematic aspect.</p>
+          </div>
+          <div class="column">
+            <img src="static/images/cat_qstn.png" alt="Categories and Questions" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quantitative Results -->
+  <section class="section section-box" id="quantitative">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths has-text-centered">
+          <h2 class="title is-3">Quantitative Results</h2>
+          <div class="content has-text-justified">
+            <p>We evaluate 10+ state of the art models with 80+ film professionals. Each annotator was shown a prompt along with two generated video samples. 
+              For each prompt, they were presented with taxonomy derived evaluation categories and corresponding questions. A total of ~250k annotations were collected.</p>
+          </div>
+          <div class="swiper human-eval-swiper" style="margin-top: 2rem;">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide">
+                <figure class="image">
+                  <img src="static/images/results/elo.png" alt="Result 1" loading="lazy">
+                </figure>
+                <div class="caption">ELO rankings of models across the 4 taxonomy pillars.</div>
+              </div>
+              <div class="swiper-slide">
+                <figure class="image">
+                  <img src="static/images/results/scine_scripts.png" alt="Result 2" loading="lazy">
+                </figure>
+                <div class="caption">Overall Results on Scine Scripts. Minimax and Wan 14B emerge as the strongest models. </div>
+              </div>
+              <div class="swiper-slide">
+                <figure class="image">
+                  <img src="static/images/results/scine_visuals.png" alt="Result 3" loading="lazy">
+                </figure>
+                <div class="caption">Overall Results on Scine Visuals. Current models perform better at Setup and Lighting, in comparison to Events and Camera.</div>
+              </div>
+              <div class="swiper-slide">
+                <figure class="image">
+                  <img src="static/images/results/emotions.png" alt="Result 4" loading="lazy">
+                </figure>
+                <div class="caption">Implicit Emotions are portrayed better than Explicit ones. On average, Remorse is portrayed most effectively, while Aggressiveness remains the most challenging to depict.
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <figure class="image">
+                  <img src="static/images/results/events_actions.png" alt="Result 5" loading="lazy">
+                </figure>
+                <div class="caption">Atomic actions are handled better than Causal and Overlapping actions in current models.</div>
+              </div>
+              <div class="swiper-slide">
+                <figure class="image">
+                  <img src="static/images/results/lighting_camera.png" alt="Result 6" loading="lazy">
+                </figure>
+                <div class="caption">Lighting Position remains a bottleneck for current models. 
+                  In Camera, Creative Intent is handled well whereas Extrinsics has lower scores on average.
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <figure class="image">
+                  <img src="static/images/results/camera_angle.png" alt="Result 7" loading="lazy">
+                </figure>
+                <div class="caption">The Dutch Camera Angle poses a common challenge to current video generative models.
+                </div>
+              </div>
+            </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VLM Evals -->
+  <section class="section section-box" id="vlm">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths has-text-centered">
+          <h2 class="title is-3">Automatic Evaluation of Professional Videos</h2>
+          <div class="content has-text-justified">
+            <p>Our trained Vision-Language Model (VLM) outperforms baselines in alignment with expert annotations.</p>
+          </div>
+          <div class="column">
+            <img src="static/images/vlm.png" alt="Automatic Evaluation Graph" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Qualitative Results -->
+  <section class="section section-box" id="qualitative">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths has-text-centered">
+          <h2 class="title is-3">Qualitative Results</h2>
+          <h3 class="title is-4">Positive Examples</h3>
+          <!-- Video Carousel -->
+          <div class="swiper video-results-swiper" style="margin-top: 2rem;">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide">
+                <video playsinline controls loop muted preload="metadata" controlslist="nodownload noremoteplayback">
+                  <source src="static/images/qual_results/positive/stepvideo_00452.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <div class="caption caption--simple">"..slow zoom-in" </div>
+                <div class="caption caption--breadcrumb">
+                  Camera <span class="divider">→</span> Trajectory <span class="divider">→</span> Camera Movement
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <video playsinline controls loop muted preload="metadata" controlslist="nodownload noremoteplayback">
+                  <source src="static/images/qual_results/positive/wan14b_00055.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <div class="caption caption--simple">"..reflections on the window" </div>
+                <div class="caption caption--breadcrumb">
+                  Lighting <span class="divider">→</span> Effects
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <video playsinline controls loop muted preload="metadata" controlslist="nodownload noremoteplayback">
+                  <source src="static/images/qual_results/positive/wan14b_01011.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <div class="caption caption--simple">"..jovial and comical" </div>
+                <div class="caption caption--breadcrumb">
+                  Events <span class="divider">→</span> Types <span class="divider">→</span> Emotions
+                </div>
+              </div>
+            </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+          </div>
+
+          <h3 class="title is-4">Failure Cases</h3>
+          <div class="swiper video-results-swiper" style="margin-top: 2rem;">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide">
+                <video playsinline controls loop muted preload="metadata" controlslist="nodownload noremoteplayback">
+                  <source src="static/images/qual_results/negative/wan14b_00025.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <div class="caption caption--simple">"..taps the bolt twice" </div>
+                <div class="caption caption--breadcrumb">
+                  Events <span class="divider">→</span> Types <span class="divider">→</span> Action
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <video playsinline controls loop muted preload="metadata" controlslist="nodownload noremoteplayback">
+                  <source src="static/images/qual_results/negative/pyramidflow_00834.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <div class="caption caption--simple">"..vines snake slowly" </div>
+                <div class="caption caption--breadcrumb">
+                  Events <span class="divider">→</span> Types <span class="divider">→</span> Action
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <video playsinline controls loop muted preload="metadata" controlslist="nodownload noremoteplayback">
+                  <source src="static/images/qual_results/negative/wan14b_00748.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <div class="caption caption--simple">"..slowly zooms out on a dolly" </div>
+                <div class="caption caption--breadcrumb">
+                  Camera <span class="divider">→</span> Trajectory <span class="divider">→</span> Camera Movement
+                </div>
+              </div>
+            </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ack -->
+  <section class="section section-box" id="ack">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths has-text-centered">
+          <h2 class="title is-3">Acknowledgements</h2>
+          <div class="content has-text-justified">
+            <p>Ack</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="tooltip" class="tooltip"></div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>. You are free to borrow the of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- D3.js and Swiper.js Libraries -->
+<!-- ▸▸ JavaScript – baseline version (drop‑in) ◂◂ -->
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+<script>
+/* -------------------------------------------------------------
+   0.  Helpers
+----------------------------------------------------------------*/
+function debounce (fn, ms=150){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), ms);} }
+let __nodeIdCounter = 0;                          // stable IDs for D3 joins
+
+/* -------------------------------------------------------------
+   1.  Draw ONE tree in the given svg element
+----------------------------------------------------------------*/
+
+// keep this near the top with your other globals
+const TREE_REGISTRY = {}; // svgId -> { root, update, expandAll, collapseToLevel }
+function attachHorizontalScrollButtons(wrapper){
+  // create once
+  let left = wrapper.querySelector('.tax-scroll-btn.left');
+  let right = wrapper.querySelector('.tax-scroll-btn.right');
+  if (!left) {
+    left = document.createElement('button');
+    left.className = 'tax-scroll-btn left';
+    left.textContent = '◀';
+    wrapper.appendChild(left);
+  }
+  if (!right) {
+    right = document.createElement('button');
+    right.className = 'tax-scroll-btn right';
+    right.textContent = '▶';
+    wrapper.appendChild(right);
+  }
+
+  const updateVisibility = () => {
+    const { scrollWidth, clientWidth, scrollLeft } = wrapper;
+    const overflow = scrollWidth > clientWidth + 2;
+    left.hidden  = !overflow || scrollLeft <= 0;
+    right.hidden = !overflow || scrollLeft + clientWidth >= scrollWidth - 1;
+  };
+
+  const nudge = (dir) => {
+    wrapper.scrollBy({ left: dir * Math.round(wrapper.clientWidth * 0.8), behavior: 'smooth' });
+  };
+
+  left.onclick  = () => nudge(-1);
+  right.onclick = () => nudge(1);
+
+  wrapper.addEventListener('scroll', updateVisibility, { passive: true });
+  window.addEventListener('resize', debounce(updateVisibility, 150));
+
+  // initial
+  updateVisibility();
+}
+
+
+function drawTree (svgId, treeData){
+  const svg     = d3.select('#'+svgId).html('');
+  const tooltip = d3.select('#tooltip');
+
+  // Layout + margins (left is generous so the root never clips)
+  const margin = { top: 40, right: 100, bottom: 40, left: 220 };
+  const xStep  = 180;  // horizontal spacing between depths
+  const yStep  = 32;   // vertical spacing between rows
+
+  // Build hierarchy and collect nodes once
+  const root     = d3.hierarchy(treeData);
+  const nodesAll = root.descendants();
+
+  // How many columns (depth) & the most crowded row (for height)
+  const maxDepth = d3.max(nodesAll, d => d.depth) || 0;
+  const depthCounts = {};
+  nodesAll.forEach(d => { depthCounts[d.depth] = (depthCounts[d.depth]||0)+1; });
+  const maxRows = d3.max(Object.values(depthCounts)) || 1;
+
+  // --- Dynamic right gutter: measure the longest label in pixels ---
+  const ctx = document.createElement('canvas').getContext('2d');
+  ctx.font = '12px sans-serif'; // match your .node text font
+  const maxLabelPx = d3.max(nodesAll, d => ctx.measureText(d.data?.name || '').width) || 80;
+
+  // circle (r=6) + text gap (12) + label + cushion
+  const RIGHT_GUTTER = Math.ceil(6 * 2 + 12 + maxLabelPx) + 65;
+
+  // Inner width used by d3.tree() (node columns only, no label gutter)
+  const innerTreeWidth = (maxDepth + 1) * xStep;
+
+  // Final SVG size (add margins AND the label gutter so labels don't clip)
+  const width  = innerTreeWidth + RIGHT_GUTTER;
+  const height = Math.max(240, maxRows * yStep + 40);
+
+  svg.attr('width',  width  + margin.left + margin.right)
+     .attr('height', height + margin.top  + margin.bottom);
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+  // Tree layout operates on the inner tree width only
+  const tree = d3.tree().size([height, innerTreeWidth]);
+
+  // Start with root + level 1 visible
+  collapseToLevel(root, 1);
+
+  // Seed positions for a smoother first transition
+  root.x0 = height / 2;
+  root.y0 = 0;
+
+  update(root);
+
+  function update(source){
+    tree(root);
+    const nodes = root.descendants();
+    const links = root.links();
+
+    // ----- NODES -----
+    const node = g.selectAll('g.node').data(nodes, d => d.id || (d.id = ++__nodeIdCounter));
+
+    const nodeEnter = node.enter().append('g')
+      .attr('class','node')
+      .attr('transform', d => `translate(${source.y0},${source.x0})`)
+      .on('click', d => {
+        if (d.children) { d._children = d.children; d.children = null; }
+        else            { d.children = d._children; d._children = null; }
+        update(d);
+      })
+      .on('mouseover', d=>{
+        tooltip.style('visibility','visible')
+               .html(`<strong>${d.data.name}</strong><br>${d.data.value||''}`);
+      })
+      .on('mousemove', ()=>{
+        const pad=12, vw=window.innerWidth, vh=window.innerHeight;
+        const r = tooltip.node().getBoundingClientRect();
+        let x = d3.event.clientX+pad, y = d3.event.clientY-pad;
+        if (x+r.width+pad>vw)  x = vw-r.width-pad;
+        if (y+r.height+pad>vh) y = vh-r.height-pad;
+        tooltip.style('left',x+'px').style('top',y+'px');
+      })
+      .on('mouseout', ()=>tooltip.style('visibility','hidden'));
+
+    nodeEnter.append('circle').attr('r', 1e-6);
+    nodeEnter.append('text')
+      .attr('dy','.35em')
+      .attr('x', d => (d.children || d._children) ? -12 : 12)
+      .attr('text-anchor', d => (d.children || d._children) ? 'end' : 'start')
+      .text(d => d.data.name);
+
+    const nodeUpdate = nodeEnter.merge(node);
+    nodeUpdate.transition().duration(350)
+      .attr('transform', d => `translate(${d.y},${d.x})`);
+
+    nodeUpdate.select('circle')
+      .attr('r', 6)
+      .style('stroke', d => (!d.children && !d._children) ? '#2e7d32' : 'steelblue')
+      .style('fill',   d => (!d.children && !d._children) ? '#e8f5e9' : '#fff');
+
+    node.exit().transition().duration(300)
+      .attr('transform', d => `translate(${source.y},${source.x})`)
+      .remove()
+      .select('circle').attr('r', 1e-6);
+
+    // ----- LINKS -----
+    const link = g.selectAll('path.link').data(links, d => d.target.id);
+
+    link.enter().insert('path','g')
+        .attr('class','link')
+        .attr('d', d => {
+          const o = {x: source.x0, y: source.y0};
+          return elbow(o,o);
+        })
+      .merge(link).transition().duration(350)
+        .attr('d', d => elbow(d.source, d.target));
+
+    link.exit().transition().duration(300)
+        .attr('d', d => {
+          const o = {x: source.x, y: source.y};
+          return elbow(o,o);
+        }).remove();
+
+    // Stash positions for tweens
+    nodes.forEach(d => { d.x0 = d.x; d.y0 = d.y; });
+  }
+
+  function elbow(s,d){
+    return `M ${s.y} ${s.x}
+            C ${(s.y+d.y)/2} ${s.x},
+              ${(s.y+d.y)/2} ${d.x},
+              ${d.y} ${d.x}`;
+  }
+
+  // Helpers
+  function expandAll(d){
+    if (d._children){ d.children = d._children; d._children = null; }
+    if (d.children) d.children.forEach(expandAll);
+  }
+  function collapseToLevel(d, level){
+    if (d.depth >= level) {
+      if (d.children){ d._children = d.children; d.children = null; }
+    }
+    if (d.children) d.children.forEach(c => collapseToLevel(c, level));
+    if (d._children) d._children.forEach(c => collapseToLevel(c, level));
+  }
+
+  // Register external controls
+  TREE_REGISTRY[svgId] = {
+    root,
+    update: () => update(root),
+    expandAll: () => { expandAll(root); update(root); },
+    collapseToLevel: (lvl=0) => { collapseToLevel(root, lvl); update(root); }
+  };
+}
+
+
+/* -------------------------------------------------------------
+   2.  Build / rebuild ALL four trees
+----------------------------------------------------------------*/
+function buildAllTrees(){
+  const mapping = {
+    'tree-container-1': data1,
+    'tree-container-2': data2,
+    'tree-container-3': data3,
+    'tree-container-4': data4
+  };
+  Object.keys(mapping).forEach(id => {
+    drawTree(id, mapping[id]);
+    const wrapper = document.getElementById(id).closest('.tree-container-wrapper');
+    attachHorizontalScrollButtons(wrapper);
+  });
+}
+
+
+// control buttons: expand/collapse per taxonomy
+document.addEventListener('click', (e)=>{
+  const expandBtn = e.target.closest('.btn-expand');
+  const collapseBtn = e.target.closest('.btn-collapse');
+  if (!expandBtn && !collapseBtn) return;
+
+  const targetId = (expandBtn || collapseBtn).dataset.target;
+  const ctl = TREE_REGISTRY[targetId];
+  if (!ctl) return;
+
+  if (expandBtn)  ctl.expandAll();
+  if (collapseBtn) ctl.collapseToLevel(1); // root + level 1
+});
+
+
+/* -------------------------------------------------------------
+   3.  Swiper + init
+----------------------------------------------------------------*/
+document.addEventListener('DOMContentLoaded', ()=>{
+  const taxonomySwiper = new Swiper('.mySwiper', {slidesPerView:1,spaceBetween:30,
+       on:{ slideChange:()=>buildAllTrees() }});
+  
+       /* --- connect top buttons to slides --- */
+const tabs = document.querySelectorAll('.taxonomy-tab');
+
+function setActiveTab(idx){
+  tabs.forEach((btn,i)=>{
+    const active = i === idx;
+    btn.classList.toggle('is-active', active);
+    btn.setAttribute('aria-selected', active ? 'true' : 'false');
+  });
+}
+
+tabs.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    taxonomySwiper.slideTo(+btn.dataset.slide);
+  });
+});
+
+taxonomySwiper.on('slideChange', () => setActiveTab(taxonomySwiper.activeIndex));
+setActiveTab(0);
+
+  /* other swipers unchanged – only taxonomy swiper matters here */
+
+  buildAllTrees();                         // first render
+  window.addEventListener('resize', debounce(buildAllTrees,250));
+});
+
+    const data1 = {
+      "name": "Setup",
+      "value": "Defines the overall arrangement and composition and blend of the scene and the subjects in it, setting the mood and visual style through its elements.",
+      "children": [
+        {
+          "name": "Scene",
+          "value": "Encompasses all visual details that construct the overall scene, including set design, scene texture, geometry, and spatial layout.",
+          "children": [
+            {
+              "name": "Texture",
+              "value": "Controls the surface quality and tactile feel of the scene, affecting visual detail and artistic style.",
+              "children": [
+                { "name": "Contrast", "value": "Determines the difference between light and dark areas to enhance visual impact." },
+                { "name": "Blur", "value": "Introduces softness to parts of the image to guide focus or create mood." },
+                { "name": "Noise", "value": "Adds random variations in brightness or color, mimicking film grain or digital sensor noise." },
+                { "name": "Film Grain", "value": "Emulates the granular texture of traditional film photography for a classic look." },
+                { "name": "Color Palette", "value": "Defines the overall range and harmony of colors in the scene, influencing its mood." }
+              ]
+            },
+            {
+              "name": "Geometry",
+              "value": "Determines the structural composition of the scene, focusing on the arrangement of lines, shapes, and balance.",
+              "children": [
+                {
+                  "name": "Frame",
+                  "value": "Describes the overall geometry of the scene, created the positioning of the objects in the scene.",
+                  "children": [
+                    { "name": "Lines", "value": "Directional elements that guide the viewer’s gaze within the scene." },
+                    {
+                      "name": "Shapes", "value": "Focuses on the geometric forms present in the composition, both regular and organic.",
+                      "children": [
+                        { "name": "Regular", "value": "Structured, geometric forms such as squares, circles, and triangles that add order to the design." },
+                        { "name": "Natural", "value": "Unstrucuted shapes that naturally emerge in the scene, without any geometric constraints" }
+                      ]
+                    },
+                    { "name": "Balance", "value": "Refers to the distribution of visual weight across the composition, ensuring a harmonious layout." }
+                  ]
+                },
+                {
+                  "name": "Space",
+                  "value": "Defines the spatial arrangement and depth within the scene, creating a sense of three-dimensionality.",
+                  "children": [
+                    {
+                      "name": "Spatial Locations", "value": "Specifies the placement of objects in relation to the viewer, distinguishing foreground, midground, and background areas.",
+                      "children": [
+                        { "name": "Positional Accuracy", "value": "The absolute position of an object or a subject in a scene" },
+                        { "name": "Relative Positioning", "value": "The relative positioning of an object in relationship to other objects in the scene." }
+                      ]
+                    },
+                    { "name": "Depth", "value": "Controls the perception of distance between elements, enhancing the three-dimensional feel of the scene." }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Set Design",
+              "value": "The design and arrangement of the set, including props, backdrop, and environment, to create a specific atmosphere.",
+              "children": [
+                {
+                  "name": "Backdrop", "value": "The background or setting against which the scene takes place.",
+                  "children": [
+                    { "name": "Setting", "value": "Defines if the scene is happening indoors or outdoors" },
+                    { "name": "Time of Day", "value": "The time of day the scene is set in." },
+                    { "name": "Location", "value": "The specific place or setting of the scene." }
+                  ]
+                },
+                {
+                  "name": "Environment", "value": "Defines the overall environment in which the scene is taking place",
+                  "children": [
+                    {
+                      "name": "Organization", "value": "The arrangement of the available space in the environment",
+                      "children": [
+                        { "name": "Negative", "value": "Defines if there are a lot of empty space." },
+                        { "name": "Positive", "value": "Defines how the space is occupied in the environment" }
+                      ]
+                    },
+                    { "name": "Mood", "value": "The emotional atmosphere or feeling created by the environment." },
+                    { "name": "Scale", "value": "The relative size or extent of the environment." },
+                    { "name": "Style", "value": "The artistic or visual style of the backdrop." },
+                    { "name": "Background", "value": "The part of the scene that is behind the main subject and does not need to be exactly described" },
+                    { "name": "Elements", "value": "The natural or artificial components of the backdrop." }
+                  ]
+                },
+                {
+                  "name": "Props", "value": "Objects present in the set, which the subjects may interact with,",
+                  "children": [
+                    { "name": "Description", "value": "A general description of the prop." },
+                    { "name": "Class", "value": "The category or type of the prop." },
+                    { "name": "Material", "value": "The substance(s) the prop is made of." },
+                    { "name": "Pattern", "value": "The design on the prop." },
+                    { "name": "Utility", "value": "The purpose or function of the prop, whether it just exists on the scene or will it be used by the subject" }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Subjects",
+          "value": "Defines the overall subjects present in the scene.",
+          "children": [
+            { "name": "Class", "value": "The category or type of the subjects." },
+            { "name": "Accessories", "value": "Items worn or carried by the subjects that enhance their appearance or functionality." },
+            { "name": "Costume", "value": "The clothing worn by the subjects, especially for a performance or to create a specific character." },
+            { "name": "Hair", "value": "The style and appearance of the subjects' hair." },
+            { "name": "Makeup", "value": "Cosmetics applied to the subjects' face or body to enhance or alter their appearance." },
+            { "name": "Pose", "value": "The position or stance of the subjects, especially for a photograph or portrait." },
+            {
+              "name": "Personality", "value": "The distinct traits and characteristics of the subjects.",
+              "children": [
+                { "name": "Silhouette", "value": "The outline or shape of the subjects against a light background." },
+                { "name": "Proportions", "value": "The relative size and scale of the subjects' body parts or features." }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Text Generation",
+          "value": "The process of creating written content to be displayed on the video"
+        }
+      ]
+    };
+
+    const data2 = {
+      "name": "Camera",
+      "value": "This category covers all camera features that shape the visual narrative, including internal settings, orientation, movement, and creative framing.",
+      "children": [
+        {
+          "name": "Intrinsics",
+          "value": "Camera intrinsics describe the internal characteristics that affect image capture, such as lens properties and sensor settings.",
+          "children": [
+            { "name": "Lens Size", "value": "Defines the focal length and field of view of the camera lens." },
+            { "name": "Depth of Field", "value": "Controls the range of focus in the image, affecting subject isolation" },
+            {
+              "name": "Exposure",
+              "value": "Exposure controls the amount of light captured by the camera sensor.",
+              "children": [
+                { "name": "Aperture", "value": "The camera lens opening that controls the amount of light propagaated through the camera." },
+                { "name": "Shutter Speed", "value": "The duration for which the camera sensor is exposed to light." },
+                { "name": "ISO", "value": "Sensitivity of the camera sensor to light." }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Extrinsics",
+          "value": "Camera extrinsics control the orientation and position of the camera relative to the subject.",
+          "children": [
+            { "name": "Angle", "value": "Defines the camera's viewpoint in relation to the subject." }
+          ]
+        },
+        {
+          "name": "Trajectory",
+          "value": "Trajectory encompasses the camera's movement and the equipment used to achieve smooth or dynamic shots..",
+          "children": [
+            {
+              "name": "Camera Movement",
+              "value": "Describes how the camera moves during a shot, influencing the storytelling and mood.",
+              "children": [
+                { "name": "Static", "value": "A fixed camera position without any movement." },
+                { "name": "2D", "value": "Camera movements restricted to horizontal or vertical axes." },
+                { "name": "3D", "value": "Camera movements that incorporate spatial depth and multi-axis motion." }
+              ]
+            },
+            { "name": "Gear", "value": "Specifies the support systems and stabilization equipment used to facilitate camera movement."}
+          ]
+        },
+        {
+          "name": "Creative Intent",
+          "value": "Creative Intent outlines the artistic decisions behind the camera's composition, framing, and overall visual style.",
+          "children": [
+            { "name": "Shot Size", "value": "Determines how much of the subject and surroundings are visible in the frame."},
+            { "name": "Framing", "value": "Defines the composition and spatial arrangement of subjects within the frame." }
+          ]
+        }
+      ]
+    };
+
+    const data3 = {
+      "name": "Lighting",
+      "value": "Controls for scene illumination.",
+      "children": [
+        {
+          "name": "Sources",
+          "value": "Specifies the origins of the lighting in the scene.",
+          "children": [
+            { "name": "Natural", "value": "Natural sources of light, such as sunlight, moonlight, or firelight." },
+            { "name": "Artificial / Practicals", "value": "Man-made light sources that illuminate the scene." }
+          ]
+        },
+        { "name": "Color Temperature", "value": "Defines the hue of the light, typically measured in Kelvin, affecting the scene’s mood." },
+        { "name": "Lighting Conditions", "value": "Describes various lighting scenarios or ambient conditions present in a scene." },
+        {
+          "name": "Effects",
+          "value": "Effects created by the lighting setup, including shadows and reflections.",
+          "children": [
+            {
+              "name": "Shadows",
+              "value": "Different types of shadows formed by the interplay of light and objects..",
+              "children": [
+                { "name": "Soft", "value": "Subtle and diffused shadows resulting from indirect or scattered light." },
+                { "name": "Hard", "value": "Sharp, well-defined shadows generated by a direct light source." }
+              ]
+            },
+            { "name": "Reflection", "value": "The effect of light bouncing off surfaces to create a reflective appearance." }
+          ]
+        },
+        {
+          "name": "Position",
+          "value": "Specifies the placement or direction of the light source relative to the subject"
+        },
+        { "name": "Advanced Controls",
+          "value": "Additional features and dynamic effects to control the lighting.",
+          "children": [
+            { "name": "Motion", "value": "Dynamic changes or movement in the lighting effect" },
+            { "name": "Color Gels", "value": "Colored filters applied to lights to modify or enhance the color of the illumination." }
+          ]
+        }
+      ]
+    };
+
+    const data4 = {
+      "name": "Events",
+      "value": "This category covers all sorts of events happening in the scene, along with its granular details",
+      "children": [
+        {
+          "name": "Types",
+          "value": "The fundamental nature of the changes or occurrences within the scene.",
+          "children": [
+            {
+              "name": "Actions", "value": "Specific physical movements or activities taking place.",
+              "children": [
+                {
+                  "name": "Interaction Types", "value": "Defines if the action involves interaction",
+                  "children": [
+                    { "name": "Standalone", "value": "If the action is stand-alone" },
+                    { "name": "Interactive", "value": "If the action involves subject-subject or object-subject interaction" }
+                  ]
+                },
+                {
+                  "name": "Portrayed as", "value": "How the action is presented within the scene",
+                  "children": [
+                    { "name": "Temporal", "value": "How actions unfold across time." },
+                    { "name": "Contextual", "value": "Where the action takes place within the scene",
+                      "children": [{"name": "Foreground", "value": "The action is taking place in the foreground"}, {"name": "Background", "value": "The action is taking place in the background"}]
+                    },
+                    { "name": "Uncertainty", "value": "The probability of the outcome of the action" }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Emotions", "value": "The feelings or moods conveyed within the scene.",
+              "children": [
+                {
+                  "name": "Expression Types", "value": "If the emotion is explicitly shown or needs to be inferred.",
+                  "children": [
+                    { "name": "Implicit", "value": "Emotions that are suggested or implied rather than directly stated." },
+                    { "name": "Explicit", "value": "Emotions that are clearly and directly shown or stated within the scene." }
+                  ]
+                },
+                {
+                  "name": "Portrayed as", "value": "How the emotion is presented within the scene",
+                  "children": [
+                    { "name": "Temporal", "value": "How emotions evolve across time." },
+                    { "name": "Contextual", "value": "Where the emotion is being felt on the screen",
+                      "children": [{"name": "Foreground", "value": "The emotion is taking place in the foreground"}, {"name": "Background", "value": "The emotion is taking place in the background"}]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Dialogues", "value": "Spoken exchanges between characters.",
+              "children": [
+                { "name": "Delivery Types", "value": "How the dialogue is delivered" },
+                { "name": "Portrayed as", "value": "How the dialogue is presented within the scene",
+                  "children": [{"name": "Contextual", "value": "Where the dialogue takes place within the scene"}]
+                }
+              ]
+            },
+            { "name": "Environment", "value": "Changes or occurrences in the setting of the scene." }
+          ]
+        },
+        {
+          "name": "Advanced Controls", "value": "Specific points or structures that influence the flow and impact of the scene.",
+          "children": [
+            { "name": "Story Structure", "value": "Key narrative elements that shape the shot's progression." },
+            {
+              "name": "Rhythm", "value": "The pacing and regularity of events within the shot.",
+              "children": [
+                {"name": "Pace", "value": "How fast the events are happening"},
+                {"name": "Regularity", "value": "How regularly the events are happening"}
+              ]
+            }
+          ]
+        }
+      ]
+    };
+
+</script>
+</body>
+</html>
