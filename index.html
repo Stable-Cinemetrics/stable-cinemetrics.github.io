@@ -6,113 +6,73 @@
   <meta name="description" content="Stable Cinemetrics: Structured Taxonomy and Evaluation for Professional Video Generation">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="assets/favicon.png">
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="assets/images/favicon.png">
 
   <!-- Fonts and Icons -->
-  <!-- Load Inter with 800 so only the leading phrase can be bolded cleanly -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
 
-  <!-- Bulma CSS Framework -->
+  <!-- Bulma -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
 
-  <!-- Your site CSS (keep this before inline <style> so inline can override) -->
+  <!-- Your CSS -->
   <link rel="stylesheet" href="index.css">
 
-  <!-- Swiper.js for Carousel -->
+  <!-- Tailwind (utility classes only; preflight disabled to avoid global resets) -->
+  <script>window.tailwind=window.tailwind||{}; tailwind.config={ corePlugins:{ preflight:false } };</script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* tiny helper used by the embedded qual section */
+    .hide-scrollbar::-webkit-scrollbar{display:none}
+    .hide-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
+  </style>
+
+  <!-- Swiper -->
   <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 
   <style>
-    :root {
-      --bulma-link-h-l: 21;
-      --bulma-link-s-l: 71;
-    }
-    
+    :root { --bulma-link-h-l: 21; --bulma-link-s-l: 71; }
+
     /* Wider taxonomy box only */
-.hero.teaser .container {
-  max-width: min(92vw, 1400px);   /* was ~980px via is-max-desktop */
-}
-
-@media (max-width: 1280px) {
-  .hero.teaser .container {
-    max-width: min(95vw, 1080px);
-  }
-}
-
-/* Make the bordered slide stretch nicely in the wider container */
-.hero.teaser .mySwiper .swiper-slide {
-  width: 100%;
-  padding: 18px 22px;             /* optional: a little breathing room */
-}
-
+    .hero.teaser .container { max-width: min(92vw, 1400px); }
+    @media (max-width: 1280px) {
+      .hero.teaser .container { max-width: min(95vw, 1080px); }
+    }
+    .hero.teaser .mySwiper .swiper-slide { width: 100%; padding: 18px 22px; }
 
     /* --- Taxonomy Tabs: pill segmented control --- */
-.taxonomy-tabs {
-  display: flex;
-  justify-content: center;
-  gap: 0;                     /* contiguous pills */
-  margin: 1.25rem 0 0.75rem;
-}
-
-.taxonomy-tab {
-  appearance: none;
-  border: 1px solid #d6d6d6;
-  background: #ffffff;
-  color: #333;
-  font-weight: 600;
-  font-size: 0.95rem;         /* bigger text */
-  letter-spacing: .2px;
-  padding: .55rem 1.15rem;    /* bigger hit area */
-  cursor: pointer;
-  transition: background .15s ease, color .15s ease, box-shadow .15s ease, border-color .15s ease;
-  line-height: 1;
-  user-select: none;
-}
-
-/* make them a single rounded pill group */
-.taxonomy-tab:first-child { border-radius: 9999px 0 0 9999px; }
-.taxonomy-tab:last-child  { border-radius: 0 9999px 9999px 0; }
-.taxonomy-tab + .taxonomy-tab { margin-left: -1px; } /* collapse shared borders */
-
-/* hover / focus aesthetics */
-.taxonomy-tab:hover {
-  background: #f6f8ff;
-  border-color: #c7d2fe;
-}
-.taxonomy-tab:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(50,115,220,.25);
-  border-color: #3273dc;
-}
-
-/* active (selected) */
-.taxonomy-tab.is-active,
-.taxonomy-tab[aria-selected="true"] {
-  background: linear-gradient(180deg, #3d7bfd 0%, #2f66e1 100%);
-  color: #fff;
-  border-color: #2f66e1;
-  box-shadow: 0 6px 14px rgba(47,102,225,.18), inset 0 0 0 1px rgba(255,255,255,.25);
-}
-
-/* subtle disabled look (if you ever need it) */
-.taxonomy-tab:disabled {
-  opacity: .55;
-  cursor: not-allowed;
-}
-
-/* Hide default Swiper arrows on taxonomy carousel */
-.hero.teaser .swiper-button-prev,
-.hero.teaser .swiper-button-next { display: none !important; }
-
-
-
-    /* --- Title typography: only "Stable Cinemetrics" is bold --- */
-    .title.is-1.publication-title {
-      font-weight: 400 !important;
-      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    .taxonomy-tabs {
+      display: flex; justify-content: center; gap: 0;
+      margin: 1.25rem 0 0.75rem;
     }
+    .taxonomy-tab {
+      appearance: none; border: 1px solid #d6d6d6; background: #ffffff; color: #333;
+      font-weight: 600; font-size: 0.95rem; letter-spacing: .2px;
+      padding: .55rem 1.15rem; cursor: pointer;
+      transition: background .15s ease, color .15s ease, box-shadow .15s ease, border-color .15s ease;
+      line-height: 1; user-select: none;
+    }
+    .taxonomy-tab:first-child { border-radius: 9999px 0 0 9999px; }
+    .taxonomy-tab:last-child  { border-radius: 0 9999px 9999px 0; }
+    .taxonomy-tab + .taxonomy-tab { margin-left: -1px; }
+    .taxonomy-tab:hover { background: #f6f8ff; border-color: #c7d2fe; }
+    .taxonomy-tab:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(50,115,220,.25); border-color: #3273dc; }
+    .taxonomy-tab.is-active,
+    .taxonomy-tab[aria-selected="true"] {
+      background: linear-gradient(180deg, #3d7bfd 0%, #2f66e1 100%);
+      color: #fff; border-color: #2f66e1;
+      box-shadow: 0 6px 14px rgba(47,102,225,.18), inset 0 0 0 1px rgba(255,255,255,.25);
+    }
+    .taxonomy-tab:disabled { opacity: .55; cursor: not-allowed; }
+
+    /* Hide Swiper arrows on taxonomy carousel */
+    .hero.teaser .swiper-button-prev,
+    .hero.teaser .swiper-button-next { display: none !important; }
+
+    /* --- Title typography --- */
+    .title.is-1.publication-title { font-weight: 400 !important; font-family: 'Inter',system-ui,-apple-system, Segoe UI, Roboto, Arial, sans-serif; }
     .scine-title { font-weight: 800 !important; }
     .scine-subtitle { font-weight: 400 !important; color: #3b3b3b; }
 
@@ -127,49 +87,24 @@
     .affil-line .bullet { margin: 0 .6rem; opacity: .5; }
 
     /* Base typography / canvas */
-    body {
-      background: #f5f5f7;
-      line-height: 1.6;
-      font-family: 'Noto Sans', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    }
-    .hero .title,
-    .publication-title,
-    .publication-authors {
-      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    }
+    body { background: #f5f5f7; line-height: 1.6; font-family: 'Noto Sans', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    .hero .title, .publication-title, .publication-authors { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
 
-    /* White "card" sections */
+    /* White card sections */
     .section-box {
-      background: #ffffff;
-      max-width: 980px;
-      margin: 4rem auto;
-      padding: 3rem 4rem;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+      background: #ffffff; max-width: 980px; margin: 4rem auto; padding: 3rem 4rem;
+      border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.06);
     }
 
-   .hero.teaser .tree-controls {
-      position: absolute;
-      top: 6px;
-      right: 8px;
-      z-index: 10;
-      background: rgba(255,255,255,.95);
-      border-radius: 10px;
-      padding: 4px;
-      box-shadow: 0 3px 10px rgba(0,0,0,.08);
-      display: inline-flex;
-      gap: .5rem;
+    .hero.teaser .tree-controls {
+      position: absolute; top: 6px; right: 8px; z-index: 10;
+      background: rgba(255,255,255,.95); border-radius: 10px; padding: 4px;
+      box-shadow: 0 3px 10px rgba(0,0,0,.08); display: inline-flex; gap: .5rem;
     }
-  .hero.teaser .btn-tax { padding: .3rem .6rem; }   
-
-  .btn-tax{
-    background:#fff; border:1px solid #d9d9d9; border-radius:8px;
-    padding:.35rem .7rem; font-size:.9rem; font-weight:600; cursor:pointer;
-    transition:box-shadow .15s ease,border-color .15s ease,background .15s ease;
-  }
-  .btn-tax:hover{ border-color:#b9c7ff; box-shadow:0 3px 10px rgba(50,115,220,.12); }
-  .btn-expand{ background:linear-gradient(180deg,#3d7bfd,#2f66e1); color:#fff; border-color:#2f66e1; }
-
+    .hero.teaser .btn-tax { padding: .3rem .6rem; }
+    .btn-tax{ background:#fff; border:1px solid #d9d9d9; border-radius:8px; padding:.35rem .7rem; font-size:.9rem; font-weight:600; cursor:pointer; transition:box-shadow .15s ease,border-color .15s ease,background .15s ease; }
+    .btn-tax:hover{ border-color:#b9c7ff; box-shadow:0 3px 10px rgba(50,115,220,.12); }
+    .btn-expand{ background:linear-gradient(180deg,#3d7bfd,#2f66e1); color:#fff; border-color:#2f66e1; }
 
     .publication-authors { margin: 1rem auto; }
     .publication-venue { color: #555; font-size: 1rem; font-weight: 700; }
@@ -178,149 +113,107 @@
     .hero .subtitle { color: #555; }
     .content p { line-height: 1.5; }
 
-    /* Swiper slides: keep bordered card look (do not remove) */
+    /* Swiper slide card look */
     .swiper-slide {
-      background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      padding: 15px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      box-sizing: border-box;
+      background: #fff; border: 1px solid #ddd; border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08); padding: 15px;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-start; box-sizing: border-box;
     }
 
-    /* Make ONLY the taxonomy swiper taller, responsive */   
+    /* Taller taxonomy swiper */
     .hero.teaser .mySwiper .swiper-slide{
-      position: relative;   /* <-- anchors .tree-controls to the slide */
-      overflow: hidden;     /* <-- clip any SVG bleed into adjacent slides */
-      width: 100%;
-      padding: 18px 22px;
-       min-height: auto;
+      position: relative; overflow: hidden; width: 100%; padding: 18px 22px; min-height: auto;
     }
 
-    .graph-title {
-      font-size: 1.25rem;
-      font-weight: bold;
-      color: #363636;
-      margin-bottom: 10px;
-      text-align: center;
-      flex: 0 0 auto;
-    }
+    /* Prevent double-smooth (we'll control it in JS) */
+    html { scroll-behavior: auto !important; }
 
-    /* Let the tree container fill the rest of the slide.
-       Also ensure non-zero height so D3 can compute sizes. */
-    .hero.teaser .tree-container-wrapper {
-      position: relative;
-      overflow: auto;
-      padding-top: 36px;
-      height: auto;
-      padding-left: 24px; 
-      min-height: 0;
-      scrollbar-gutter: stable both-edges;
-    }
 
-    .tax-scroll-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      border: 1px solid #d9d9d9;
-      background: rgba(255,255,255,.95);
-      border-radius: 9999px;
-      padding: .35rem .55rem;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 3px 10px rgba(0,0,0,.08);
-      z-index: 5;
-    }
+    .graph-title { font-size: 1.25rem; font-weight: bold; color: #363636; margin-bottom: 10px; text-align: center; flex: 0 0 auto; }
 
+    .hero.teaser .tree-container-wrapper { position: relative; overflow: visible; padding-top: 36px; padding-left: 24px; height: auto; min-height: 0; }
+
+    .tax-scroll-btn { position: absolute; top: 50%; transform: translateY(-50%); border: 1px solid #d9d9d9; background: rgba(255,255,255,.95); border-radius: 9999px; padding: .35rem .55rem; font-weight: 700; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,.08); z-index: 5; }
     .tax-scroll-btn.left  { left: 8px; }
     .tax-scroll-btn.right { right: 8px; }
     .tax-scroll-btn[hidden] { display: none; }
 
-    /* SVG should stretch to wrapper */
-    .hero.teaser .tree-svg {
-  /* Let the JS pixel attributes control size */
-  width: auto !important;
-  height: auto !important;
-  display: block;
-}
+    .hero.teaser .tree-svg { display: block; }
+    .link { fill: none; stroke: #ccc; stroke-width: 2px; }
+    .node circle { stroke: steelblue; stroke-width: 3px; cursor: pointer; fill: #fff; }
+    .node text { font: 12px sans-serif; cursor: pointer; }
+    .toggle-text { font-size: 12px; fill: #2563eb; cursor: pointer; text-anchor: start; text-decoration: underline; }
 
-    .link {
-      fill: none;
-      stroke: #ccc;
-      stroke-width: 2px;
-    }
+    .tooltip { position: fixed; visibility: hidden; background-color: #ffffff; border: 1px solid #ccc; border-radius: 6px; padding: 10px; font-size: 12px; color: #333; box-shadow: 0 3px 8px rgba(0,0,0,0.15); max-width: 260px; pointer-events: none; z-index: 100; }
 
-    .node circle {
-      stroke: steelblue;
-      stroke-width: 3px;
-      cursor: pointer;
-      fill: #fff;
-    }
-
-    .node text {
-      font: 12px sans-serif;
-      cursor: pointer;
-    }
-
-    .toggle-text {
-      font-size: 12px;
-      fill: #2563eb;
-      cursor: pointer;
-      text-anchor: start;
-      text-decoration: underline;
-    }
-
-    .tooltip {
-      position: fixed;
-      visibility: hidden;
-      background-color: #ffffff;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      padding: 10px;
-      font-size: 12px;
-      color: #333;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-      max-width: 260px;
-      pointer-events: none;
-      z-index: 100;
-    }
-
-    /* Swiper Navigation Buttons */
-    .swiper-button-prev, .swiper-button-next {
-      color: #333;
-    }
-
-    /* Other swipers (figures/videos) remain unboxed */
+    /* Other swipers (figures/videos) no card */
     .human-eval-swiper .swiper-slide,
-    .video-results-swiper .swiper-slide {
-      background: transparent;
-      border: none;
-      box-shadow: none;
-      height: auto;
-    }
+    .video-results-swiper .swiper-slide { background: transparent; border: none; box-shadow: none; height: auto; }
     .human-eval-swiper .caption,
-    .video-results-swiper .caption {
-      margin-top: 0.5rem;
-      font-style: italic;
-      color: #555;
-    }
-    .video-results-swiper video {
-      max-width: 100%;
-      height: auto;
-      border-radius: 8px;
-    }
+    .video-results-swiper .caption { margin-top: 0.5rem; font-style: italic; color: #555; }
+    .video-results-swiper video { max-width: 100%; height: auto; border-radius: 8px; }
 
-    /* Captions polish */
     .caption--simple { margin-top: .25rem; font-weight: 600; }
     .caption--breadcrumb { margin-top: .1rem; font-size: .9rem; color: #777; }
     .caption--breadcrumb .divider { margin: 0 .35rem; opacity: .6; }
+
+    /* ===== ToC (top-left) ===== */
+    #page-toc {
+      position: fixed;
+      top: 90px;               /* nudge under your hero title */
+      left: 12px;
+      width: 220px;
+      z-index: 50;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,.06);
+      padding: 10px 10px 8px;
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    #page-toc h4 {
+      margin: 0 0 6px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #111827;
+    }
+    #page-toc ul { list-style: none; margin: 0; padding: 0; }
+    #page-toc li { margin: 4px 0; }
+    #page-toc a {
+      display: block;
+      padding: 6px 8px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 0.92rem;
+      color: #374151;
+      transition: background .15s ease, color .15s ease;
+    }
+    #page-toc a:hover { background: #f3f4f6; }
+    #page-toc a.is-active {
+      background: linear-gradient(180deg, #3d7bfd 0%, #2f66e1 100%);
+      color: #fff;
+    }
+
+    /* Show/hide button for small screens */
+    #toc-toggle { display: none; }
+
+    @media (max-width: 1100px){
+      #page-toc { display: none; }   /* ToC hidden on small screens */
+      #toc-toggle { display: inline-block; }  /* Toggle visible only here */
+    }
+
+    /* Smooth anchor position when scrolled (avoids heading underlap) */
+    section, .hero { scroll-margin-top: 90px; }
+
   </style>
 </head>
 <body>
+
+  <button id="toc-toggle" aria-expanded="false" aria-controls="page-toc">☰ Sections</button>
+  <nav id="page-toc" aria-label="Table of contents">
+    <h4>On this page</h4>
+    <ul id="page-toc-list"></ul>
+  </nav>
 
   <!-- HERO HEADER -->
   <section class="hero">
@@ -329,13 +222,11 @@
         <div class="columns is-centered">
           <div class="column has-text-centered">
 
-            <!-- Title: only leading phrase is bold -->
             <h1 class="title is-1 publication-title">
               <span class="scine-title">Stable Cinemetrics</span>
               <span class="scine-subtitle">: Structured Taxonomy and Evaluation for Professional Video Generation</span>
             </h1>
 
-            <!-- Authors (clean separators, tight superscripts) -->
             <div class="author-line">
               <a href="https://agneetchatterjee.com/" target="_blank">Agneet Chatterjee</a><span class="sup">1,2</span>
               <span class="sep">·</span>
@@ -356,7 +247,6 @@
               <a href="https://varunjampani.github.io" target="_blank">Varun Jampani</a><span class="sup">1</span>
             </div>
 
-            <!-- Affiliations on one line -->
             <div class="affil-line">
               <span class="sup">1</span> Stability AI
               <span class="bullet">•</span>
@@ -380,13 +270,14 @@
         <h4 class="title is-4 has-text-centered">
           <em>Structured taxonomies at the intersection of Generative Video Models and Professional Use, built on the principles of cinematic control.</em>
         </h4>
-        <div class="taxonomy-tabs has-text-centered" role="tablist" aria-label="Taxonomies">
-  <button class="taxonomy-tab" role="tab" aria-selected="true"  data-slide="0">Camera</button>
-  <button class="taxonomy-tab" role="tab" aria-selected="false" data-slide="1">Lighting</button>
-  <button class="taxonomy-tab" role="tab" aria-selected="false" data-slide="2">Setup</button>
-  <button class="taxonomy-tab" role="tab" aria-selected="false" data-slide="3">Events</button>
-</div>
 
+        <!-- MAIN TAXONOMY TABS (these control Swiper) -->
+        <div class="taxonomy-tabs has-text-centered" role="tablist" aria-label="Taxonomies">
+          <button class="taxonomy-tab" role="tab" aria-selected="true"  data-slide="0">Camera</button>
+          <button class="taxonomy-tab" role="tab" aria-selected="false" data-slide="1">Lighting</button>
+          <button class="taxonomy-tab" role="tab" aria-selected="false" data-slide="2">Setup</button>
+          <button class="taxonomy-tab" role="tab" aria-selected="false" data-slide="3">Events</button>
+        </div>
 
         <!-- ===== Carousel starts ===== -->
         <div class="swiper mySwiper">
@@ -395,47 +286,48 @@
             <div class="swiper-slide">
               <h3 class="graph-title"></h3>
               <div class="tree-controls">
-  <button class="btn-tax btn-collapse" data-target="tree-container-2">Collapse</button>
-  <button class="btn-tax btn-expand"  data-target="tree-container-2">Expand</button>
-</div>
-<div class="tree-container-wrapper">
-  <svg id="tree-container-2" class="tree-svg"></svg>
-</div>
+                <button class="btn-tax btn-collapse" data-target="tree-container-2">Collapse</button>
+                <button class="btn-tax btn-expand"  data-target="tree-container-2">Expand</button>
+              </div>
+              <div class="tree-container-wrapper">
+                <svg id="tree-container-2" class="tree-svg"></svg>
+              </div>
             </div>
+
             <!-- Slide 3: Lighting Graph -->
             <div class="swiper-slide">
               <h3 class="graph-title"></h3>
               <div class="tree-controls">
-  <button class="btn-tax btn-collapse" data-target="tree-container-3">Collapse</button>
-  <button class="btn-tax btn-expand"  data-target="tree-container-3">Expand</button>
-</div>
-<div class="tree-container-wrapper">
-  <svg id="tree-container-3" class="tree-svg"></svg>
-</div>
+                <button class="btn-tax btn-collapse" data-target="tree-container-3">Collapse</button>
+                <button class="btn-tax btn-expand"  data-target="tree-container-3">Expand</button>
+              </div>
+              <div class="tree-container-wrapper">
+                <svg id="tree-container-3" class="tree-svg"></svg>
+              </div>
             </div>
+
             <!-- Slide 1: Setup Graph -->
             <div class="swiper-slide">
               <h3 class="graph-title"></h3>
               <div class="tree-controls">
-  <button class="btn-tax btn-collapse" data-target="tree-container-1">Collapse</button>
-  <button class="btn-tax btn-expand"  data-target="tree-container-1">Expand</button>
-</div>
-<div class="tree-container-wrapper">
-  <svg id="tree-container-1" class="tree-svg"></svg>
-</div>
+                <button class="btn-tax btn-collapse" data-target="tree-container-1">Collapse</button>
+                <button class="btn-tax btn-expand"  data-target="tree-container-1">Expand</button>
+              </div>
+              <div class="tree-container-wrapper">
+                <svg id="tree-container-1" class="tree-svg"></svg>
+              </div>
             </div>
 
             <!-- Slide 4: Events Graph -->
             <div class="swiper-slide">
               <h3 class="graph-title"></h3>
               <div class="tree-controls">
-  <button class="btn-tax btn-collapse" data-target="tree-container-4">Collapse</button>
-  <button class="btn-tax btn-expand"  data-target="tree-container-4">Expand</button>
-</div>
-<div class="tree-container-wrapper">
-  <svg id="tree-container-4" class="tree-svg"></svg>
-</div>
-
+                <button class="btn-tax btn-collapse" data-target="tree-container-4">Collapse</button>
+                <button class="btn-tax btn-expand"  data-target="tree-container-4">Expand</button>
+              </div>
+              <div class="tree-container-wrapper">
+                <svg id="tree-container-4" class="tree-svg"></svg>
+              </div>
             </div>
           </div>
           <div class="swiper-button-prev"></div>
@@ -467,19 +359,98 @@
         <div class="column is-four-fifths has-text-centered">
           <h2 class="title is-3">The Stable Cinemetrics Benchmark</h2>
           <div class="content has-text-justified">
-            <p>Mirroring real world professional workflows, we develop SCINE Scripts and Visuals, which are created by sampling control nodes from the proposed taxonomies.</p>
+            <p>To reflect real world professional workflows, we develop SCINE Scripts and Visuals by sampling control nodes from our defined taxonomies.</p>
           </div>
           <div class="column">
-            <img src="static/images/overall_pipeline.png" alt="Overall Pipeline" loading="lazy">
+            <img src="assets/images/pipeline.png" alt="Overall Pipeline" loading="lazy">
           </div>
+
           <div class="content has-text-justified">
-            <p>Each control node in SCINE prompts are categorized and, individual questions for each nodes are generated, allowing for isolated and independent evaluation into each cinematic aspect.</p>
+            <p>In SCINE prompts, each control node is categorized, and specific questions are generated for every node, enabling focused and independent evaluation of each cinematic aspect.</p>
           </div>
+
+          <!-- NEW: Independent image toggle tabs -->
+          <div class="taxonomy-tabs has-text-centered" id="category-tabs" role="tablist" aria-label="Category figures">
+            <button class="taxonomy-tab is-active" role="tab" aria-selected="true"
+                    data-image="assets/images/categories/camera_lighting.png">
+              Camera &amp; Lighting
+            </button>
+            <button class="taxonomy-tab" role="tab" aria-selected="false"
+                    data-image="assets/images/categories/setup.png">
+              Setup
+            </button>
+            <button class="taxonomy-tab" role="tab" aria-selected="false"
+                    data-image="assets/images/categories/events.png">
+              Events
+            </button>
+          </div>
+
           <div class="column">
-            <img src="static/images/cat_qstn.png" alt="Categories and Questions" loading="lazy">
+            <img id="category-image"
+                 src="assets/images/categories/camera_lighting.png"
+                 alt="Categories and Questions"
+                 loading="lazy">
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+    <!-- ===================== QUALITATIVE (NEW) ===================== -->
+<section class="section section-box" id="qualitative">
+  <div class="md:ml-0 p-0 space-y-20">
+
+    <h2 class="title is-3 has-text-centered">Qualitative Results</h2>
+
+    <!-- ═══════════════════ SCINE Scripts ═══════════════════ -->
+    <section id="scine-scripts" class="space-y-6">
+      <h2 class="title is-4 has-text-centered">SCINE Scripts</h2>
+      <p id="desc-scripts" class="max-w-3xl mx-auto has-text-centered has-text-grey"></p>
+
+      <div class="w-full max-w-6xl mx-auto is-flex is-justify-content-space-between is-align-items-center">
+        <button id="prevBtn" class="px-4 py-2 bg-gray-100 border border-gray-300 rounded hover:bg-gray-200 transition text-sm md:text-base">⟵ Prev</button>
+        <button id="nextBtn" class="px-4 py-2 bg-gray-100 border border-gray-300 rounded hover:bg-gray-200 transition text-sm md:text-base">Next ⟶</button>
+      </div>
+
+      <div id="carousel-wrapper" class="w-full max-w-6xl mx-auto min-h-[14rem] is-flex is-align-items-center is-justify-content-center"></div>
+      <div id="promptBox" class="max-w-5xl mx-auto is-size-5 has-text-centered"></div>
+    </section>
+
+    <!-- ═══════════════════ SCINE Visuals ═══════════════════ -->
+    <section id="scine-visuals" class="space-y-6">
+      <h2 class="title is-4 has-text-centered">SCINE Visuals</h2>
+      <p id="desc-visuals" class="max-w-3xl mx-auto has-text-centered has-text-grey"></p>
+
+      <div class="w-full max-w-6xl mx-auto is-flex is-justify-content-space-between is-align-items-center">
+        <button id="prevVisBtn" class="px-4 py-2 bg-gray-100 border border-gray-300 rounded hover:bg-gray-200 transition text-sm md:text-base">⟵ Prev</button>
+        <button id="nextVisBtn" class="px-4 py-2 bg-gray-100 border border-gray-300 rounded hover:bg-gray-200 transition text-sm md:text-base">Next ⟶</button>
+      </div>
+
+      <div id="visuals-carousel-wrapper" class="w-full max-w-6xl mx-auto min-h-[14rem] is-flex is-align-items-center is-justify-content-center"></div>
+      <div id="visuals-promptBox" class="max-w-5xl mx-auto is-size-5 has-text-centered"></div>
+    </section>
+
+    <!-- ═══════════ Pairwise Model Comparisons ═══════════ -->
+    <section id="pairwise" class="space-y-6">
+      <h2 class="title is-4 has-text-centered">Pairwise Model Comparisons</h2>
+      <p id="desc-pairwise" class="max-w-3xl mx-auto has-text-centered has-text-grey"></p>
+
+      <div class="w-full max-w-6xl mx-auto is-flex is-justify-content-space-between is-align-items-center">
+        <button id="prevPair" class="px-4 py-2 bg-gray-100 border border-gray-300 rounded hover:bg-gray-200 transition text-sm md:text-base">⟵ Prev</button>
+        <button id="nextPair" class="px-4 py-2 bg-gray-100 border border-gray-300 rounded hover:bg-gray-200 transition text-sm md:text-base">Next ⟶</button>
+      </div>
+
+      <div id="pair-wrapper" class="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-2"></div>
+      <p id="pair-prompt" class="max-w-5xl mx-auto is-size-5 has-text-centered"></p>
+
+      <details id="pair-meta" class="max-w-6xl mx-auto bg-gray-50 border border-gray-200 p-4 rounded">
+        <summary class="cursor-pointer is-family-sans-serif is-size-6 has-text-weight-semibold select-none">
+          Show Metadata (Question, Categories and Scores)
+        </summary>
+        <div class="mt-3 overflow-x-auto" id="pair-meta-body"></div>
+      </details>
+    </section>
+
     </div>
   </section>
 
@@ -550,6 +521,8 @@
     </div>
   </section>
 
+
+
   <!-- VLM Evals -->
   <section class="section section-box" id="vlm">
     <div class="container is-max-desktop">
@@ -557,99 +530,11 @@
         <div class="column is-four-fifths has-text-centered">
           <h2 class="title is-3">Automatic Evaluation of Professional Videos</h2>
           <div class="content has-text-justified">
-            <p>Our trained Vision-Language Model (VLM) outperforms baselines in alignment with expert annotations.</p>
+            <p>We also develop a Vision-Language Model that surpasses baseline models in alignment with expert annotations for evaluating professional video generation.</p>
           </div>
           <div class="column">
             <img src="static/images/vlm.png" alt="Automatic Evaluation Graph" loading="lazy">
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Qualitative Results -->
-  <section class="section section-box" id="qualitative">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column is-four-fifths has-text-centered">
-          <h2 class="title is-3">Qualitative Results</h2>
-          <h3 class="title is-4">Positive Examples</h3>
-          <!-- Video Carousel -->
-          <div class="swiper video-results-swiper" style="margin-top: 2rem;">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide">
-                <video playsinline controls loop muted preload="metadata" controlslist="nodownload noremoteplayback">
-                  <source src="static/images/qual_results/positive/stepvideo_00452.mp4" type="video/mp4">
-                  Your browser does not support the video tag.
-                </video>
-                <div class="caption caption--simple">"..slow zoom-in" </div>
-                <div class="caption caption--breadcrumb">
-                  Camera <span class="divider">→</span> Trajectory <span class="divider">→</span> Camera Movement
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <video playsinline controls loop muted preload="metadata" controlslist="nodownload noremoteplayback">
-                  <source src="static/images/qual_results/positive/wan14b_00055.mp4" type="video/mp4">
-                  Your browser does not support the video tag.
-                </video>
-                <div class="caption caption--simple">"..reflections on the window" </div>
-                <div class="caption caption--breadcrumb">
-                  Lighting <span class="divider">→</span> Effects
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <video playsinline controls loop muted preload="metadata" controlslist="nodownload noremoteplayback">
-                  <source src="static/images/qual_results/positive/wan14b_01011.mp4" type="video/mp4">
-                  Your browser does not support the video tag.
-                </video>
-                <div class="caption caption--simple">"..jovial and comical" </div>
-                <div class="caption caption--breadcrumb">
-                  Events <span class="divider">→</span> Types <span class="divider">→</span> Emotions
-                </div>
-              </div>
-            </div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-          </div>
-
-          <h3 class="title is-4">Failure Cases</h3>
-          <div class="swiper video-results-swiper" style="margin-top: 2rem;">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide">
-                <video playsinline controls loop muted preload="metadata" controlslist="nodownload noremoteplayback">
-                  <source src="static/images/qual_results/negative/wan14b_00025.mp4" type="video/mp4">
-                  Your browser does not support the video tag.
-                </video>
-                <div class="caption caption--simple">"..taps the bolt twice" </div>
-                <div class="caption caption--breadcrumb">
-                  Events <span class="divider">→</span> Types <span class="divider">→</span> Action
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <video playsinline controls loop muted preload="metadata" controlslist="nodownload noremoteplayback">
-                  <source src="static/images/qual_results/negative/pyramidflow_00834.mp4" type="video/mp4">
-                  Your browser does not support the video tag.
-                </video>
-                <div class="caption caption--simple">"..vines snake slowly" </div>
-                <div class="caption caption--breadcrumb">
-                  Events <span class="divider">→</span> Types <span class="divider">→</span> Action
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <video playsinline controls loop muted preload="metadata" controlslist="nodownload noremoteplayback">
-                  <source src="static/images/qual_results/negative/wan14b_00748.mp4" type="video/mp4">
-                  Your browser does not support the video tag.
-                </video>
-                <div class="caption caption--simple">"..slowly zooms out on a dolly" </div>
-                <div class="caption caption--breadcrumb">
-                  Camera <span class="divider">→</span> Trajectory <span class="divider">→</span> Camera Movement
-                </div>
-              </div>
-            </div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-          </div>
-
         </div>
       </div>
     </div>
@@ -676,47 +561,31 @@
       <div class="columns is-centered">
         <div class="column is-8">
           <div class="content">
-            <p>This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>. You are free to borrow the of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+            <p>This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic-project-page-template</a>. You are free to borrow this website, we just ask that you link back to this page in the footer. This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
           </div>
         </div>
       </div>
     </div>
   </footer>
 
-  <!-- D3.js and Swiper.js Libraries -->
-<!-- ▸▸ JavaScript – baseline version (drop‑in) ◂◂ -->
-<script src="https://d3js.org/d3.v5.min.js"></script>
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <!-- D3 + Swiper -->
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
-<script>
+  <script>
 /* -------------------------------------------------------------
    0.  Helpers
 ----------------------------------------------------------------*/
 function debounce (fn, ms=150){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), ms);} }
-let __nodeIdCounter = 0;                          // stable IDs for D3 joins
+let __nodeIdCounter = 0;
 
-/* -------------------------------------------------------------
-   1.  Draw ONE tree in the given svg element
-----------------------------------------------------------------*/
-
-// keep this near the top with your other globals
 const TREE_REGISTRY = {}; // svgId -> { root, update, expandAll, collapseToLevel }
+
 function attachHorizontalScrollButtons(wrapper){
-  // create once
   let left = wrapper.querySelector('.tax-scroll-btn.left');
   let right = wrapper.querySelector('.tax-scroll-btn.right');
-  if (!left) {
-    left = document.createElement('button');
-    left.className = 'tax-scroll-btn left';
-    left.textContent = '◀';
-    wrapper.appendChild(left);
-  }
-  if (!right) {
-    right = document.createElement('button');
-    right.className = 'tax-scroll-btn right';
-    right.textContent = '▶';
-    wrapper.appendChild(right);
-  }
+  if (!left) { left = document.createElement('button'); left.className = 'tax-scroll-btn left'; left.textContent = '◀'; wrapper.appendChild(left); }
+  if (!right){ right = document.createElement('button'); right.className = 'tax-scroll-btn right'; right.textContent = '▶'; wrapper.appendChild(right); }
 
   const updateVisibility = () => {
     const { scrollWidth, clientWidth, scrollLeft } = wrapper;
@@ -725,52 +594,53 @@ function attachHorizontalScrollButtons(wrapper){
     right.hidden = !overflow || scrollLeft + clientWidth >= scrollWidth - 1;
   };
 
-  const nudge = (dir) => {
-    wrapper.scrollBy({ left: dir * Math.round(wrapper.clientWidth * 0.8), behavior: 'smooth' });
-  };
-
+  const nudge = (dir) => wrapper.scrollBy({ left: dir * Math.round(wrapper.clientWidth * 0.8), behavior: 'smooth' });
   left.onclick  = () => nudge(-1);
   right.onclick = () => nudge(1);
 
   wrapper.addEventListener('scroll', updateVisibility, { passive: true });
   window.addEventListener('resize', debounce(updateVisibility, 150));
-
-  // initial
   updateVisibility();
 }
 
+function buildTreeForIndex(idx){
+  const idByIndex = ['tree-container-2','tree-container-3','tree-container-1','tree-container-4'];
+  const dataByIndex = [data2, data3, data1, data4];
+  const id = idByIndex[idx]; const data = dataByIndex[idx];
+  if (!id) return;
+  drawTree(id, data);
+  requestAnimationFrame(() => {
+    taxonomySwiper.updateSize();
+    taxonomySwiper.updateSlides();
+    taxonomySwiper.updateAutoHeight(300);
+  });
+  const wrapper = document.getElementById(id).closest('.tree-container-wrapper');
+  attachHorizontalScrollButtons(wrapper);
+}
 
 function drawTree (svgId, treeData){
   const svg     = d3.select('#'+svgId).html('');
   const tooltip = d3.select('#tooltip');
 
-  // Layout + margins (left is generous so the root never clips)
   const margin = { top: 40, right: 100, bottom: 40, left: 220 };
-  const xStep  = 180;  // horizontal spacing between depths
-  const yStep  = 32;   // vertical spacing between rows
+  const xStep  = 180;
+  const yStep  = 32;
 
-  // Build hierarchy and collect nodes once
   const root     = d3.hierarchy(treeData);
   const nodesAll = root.descendants();
 
-  // How many columns (depth) & the most crowded row (for height)
   const maxDepth = d3.max(nodesAll, d => d.depth) || 0;
   const depthCounts = {};
   nodesAll.forEach(d => { depthCounts[d.depth] = (depthCounts[d.depth]||0)+1; });
   const maxRows = d3.max(Object.values(depthCounts)) || 1;
 
-  // --- Dynamic right gutter: measure the longest label in pixels ---
   const ctx = document.createElement('canvas').getContext('2d');
-  ctx.font = '12px sans-serif'; // match your .node text font
+  ctx.font = '12px sans-serif';
   const maxLabelPx = d3.max(nodesAll, d => ctx.measureText(d.data?.name || '').width) || 80;
 
-  // circle (r=6) + text gap (12) + label + cushion
   const RIGHT_GUTTER = Math.ceil(6 * 2 + 12 + maxLabelPx) + 65;
-
-  // Inner width used by d3.tree() (node columns only, no label gutter)
   const innerTreeWidth = (maxDepth + 1) * xStep;
 
-  // Final SVG size (add margins AND the label gutter so labels don't clip)
   const width  = innerTreeWidth + RIGHT_GUTTER;
   const height = Math.max(240, maxRows * yStep + 40);
 
@@ -778,17 +648,10 @@ function drawTree (svgId, treeData){
      .attr('height', height + margin.top  + margin.bottom);
 
   const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
-
-  // Tree layout operates on the inner tree width only
   const tree = d3.tree().size([height, innerTreeWidth]);
 
-  // Start with root + level 1 visible
   collapseToLevel(root, 1);
-
-  // Seed positions for a smoother first transition
-  root.x0 = height / 2;
-  root.y0 = 0;
-
+  root.x0 = height / 2; root.y0 = 0;
   update(root);
 
   function update(source){
@@ -796,7 +659,6 @@ function drawTree (svgId, treeData){
     const nodes = root.descendants();
     const links = root.links();
 
-    // ----- NODES -----
     const node = g.selectAll('g.node').data(nodes, d => d.id || (d.id = ++__nodeIdCounter));
 
     const nodeEnter = node.enter().append('g')
@@ -842,7 +704,6 @@ function drawTree (svgId, treeData){
       .remove()
       .select('circle').attr('r', 1e-6);
 
-    // ----- LINKS -----
     const link = g.selectAll('path.link').data(links, d => d.target.id);
 
     link.enter().insert('path','g')
@@ -860,7 +721,6 @@ function drawTree (svgId, treeData){
           return elbow(o,o);
         }).remove();
 
-    // Stash positions for tweens
     nodes.forEach(d => { d.x0 = d.x; d.y0 = d.y; });
   }
 
@@ -871,20 +731,13 @@ function drawTree (svgId, treeData){
               ${d.y} ${d.x}`;
   }
 
-  // Helpers
-  function expandAll(d){
-    if (d._children){ d.children = d._children; d._children = null; }
-    if (d.children) d.children.forEach(expandAll);
-  }
+  function expandAll(d){ if (d._children){ d.children = d._children; d._children = null; } if (d.children) d.children.forEach(expandAll); }
   function collapseToLevel(d, level){
-    if (d.depth >= level) {
-      if (d.children){ d._children = d.children; d.children = null; }
-    }
+    if (d.depth >= level) { if (d.children){ d._children = d.children; d.children = null; } }
     if (d.children) d.children.forEach(c => collapseToLevel(c, level));
     if (d._children) d._children.forEach(c => collapseToLevel(c, level));
   }
 
-  // Register external controls
   TREE_REGISTRY[svgId] = {
     root,
     update: () => update(root),
@@ -893,17 +746,11 @@ function drawTree (svgId, treeData){
   };
 }
 
-
 /* -------------------------------------------------------------
-   2.  Build / rebuild ALL four trees
+   2.  Build all trees
 ----------------------------------------------------------------*/
 function buildAllTrees(){
-  const mapping = {
-    'tree-container-1': data1,
-    'tree-container-2': data2,
-    'tree-container-3': data3,
-    'tree-container-4': data4
-  };
+  const mapping = { 'tree-container-1': data1, 'tree-container-2': data2, 'tree-container-3': data3, 'tree-container-4': data4 };
   Object.keys(mapping).forEach(id => {
     drawTree(id, mapping[id]);
     const wrapper = document.getElementById(id).closest('.tree-container-wrapper');
@@ -911,56 +758,90 @@ function buildAllTrees(){
   });
 }
 
-
-// control buttons: expand/collapse per taxonomy
+/* expand/collapse buttons */
 document.addEventListener('click', (e)=>{
   const expandBtn = e.target.closest('.btn-expand');
   const collapseBtn = e.target.closest('.btn-collapse');
   if (!expandBtn && !collapseBtn) return;
-
   const targetId = (expandBtn || collapseBtn).dataset.target;
   const ctl = TREE_REGISTRY[targetId];
   if (!ctl) return;
-
-  if (expandBtn)  ctl.expandAll();
-  if (collapseBtn) ctl.collapseToLevel(1); // root + level 1
+  if (expandBtn)   ctl.expandAll();
+  if (collapseBtn) ctl.collapseToLevel(1);
+  requestAnimationFrame(() => taxonomySwiper?.updateAutoHeight(200));
 });
-
 
 /* -------------------------------------------------------------
-   3.  Swiper + init
+   3.  Swiper + Tabs + Benchmark toggles
 ----------------------------------------------------------------*/
-document.addEventListener('DOMContentLoaded', ()=>{
-  const taxonomySwiper = new Swiper('.mySwiper', {slidesPerView:1,spaceBetween:30,
-       on:{ slideChange:()=>buildAllTrees() }});
-  
-       /* --- connect top buttons to slides --- */
-const tabs = document.querySelectorAll('.taxonomy-tab');
+let taxonomySwiper;
 
-function setActiveTab(idx){
-  tabs.forEach((btn,i)=>{
-    const active = i === idx;
-    btn.classList.toggle('is-active', active);
-    btn.setAttribute('aria-selected', active ? 'true' : 'false');
+document.addEventListener('DOMContentLoaded', () => {
+  taxonomySwiper = new Swiper('.mySwiper', {
+    slidesPerView: 1,
+    spaceBetween: 30,
+    autoHeight: true,
+    observer: true,
+    observeParents: true,
+    on: {
+      slideChange: () => {
+        setActiveTab(taxonomySwiper.activeIndex);
+        buildTreeForIndex(taxonomySwiper.activeIndex);
+      }
+    }
   });
-}
 
-tabs.forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    taxonomySwiper.slideTo(+btn.dataset.slide);
+  // ----- MAIN TAXONOMY TABS (Camera | Lighting | Setup | Events) -----
+  const mainTabList = document.querySelector('.hero.teaser .taxonomy-tabs[aria-label="Taxonomies"]');
+  const tabs = mainTabList ? mainTabList.querySelectorAll('.taxonomy-tab') : [];
+
+  function setActiveTab(idx){
+    tabs.forEach((btn,i)=>{
+      const active = i === idx;
+      btn.classList.toggle('is-active', active);
+      btn.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+  }
+
+  tabs.forEach(btn=>{
+    btn.addEventListener('click', () => taxonomySwiper.slideTo(+btn.dataset.slide));
   });
+
+  // First render
+  setActiveTab(taxonomySwiper.activeIndex);
+  buildTreeForIndex(taxonomySwiper.activeIndex);
+
+  // Rebuild active on resize
+  window.addEventListener('resize', debounce(() => {
+    buildTreeForIndex(taxonomySwiper.activeIndex);
+  }, 250));
+
+  // ----- BENCHMARK IMAGE TOGGLES (independent of Swiper) -----
+  const categoryTabsContainer = document.getElementById('category-tabs');
+  if (categoryTabsContainer) {
+    const categoryTabs = categoryTabsContainer.querySelectorAll('.taxonomy-tab');
+    const categoryImage = document.getElementById('category-image');
+
+    categoryTabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        categoryTabs.forEach(b => {
+          b.classList.remove('is-active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('is-active');
+        btn.setAttribute('aria-selected', 'true');
+
+        const newSrc = btn.getAttribute('data-image');
+        if (categoryImage && newSrc) categoryImage.src = newSrc;
+      });
+    });
+  }
 });
 
-taxonomySwiper.on('slideChange', () => setActiveTab(taxonomySwiper.activeIndex));
-setActiveTab(0);
-
-  /* other swipers unchanged – only taxonomy swiper matters here */
-
-  buildAllTrees();                         // first render
-  window.addEventListener('resize', debounce(buildAllTrees,250));
-});
-
-    const data1 = {
+/* -------------------------------------------------------------
+   4.  Data
+----------------------------------------------------------------*/
+ const data1 = {
       "name": "Setup",
       "value": "Defines the overall arrangement and composition and blend of the scene and the subjects in it, setting the mood and visual style through its elements.",
       "children": [
@@ -1260,6 +1141,276 @@ setActiveTab(0);
       ]
     };
 
+  </script>
+  <script>
+(() => {
+  /* ---------------- Section Descriptions ---------------- */
+  const sectionDescriptions = {
+    scripts : 'Qualitative results on SCINE Scripts across models.',
+    visuals : 'Qualitative results on SCINE Visuals across models.',
+    pairwise: 'Side-by-Side Model Comparisons with per-category scores.'
+  };
+  const $ = sel => document.querySelector(sel);
+  $('#desc-scripts' ).textContent = sectionDescriptions.scripts;
+  $('#desc-visuals' ).textContent = sectionDescriptions.visuals;
+  $('#desc-pairwise').textContent = sectionDescriptions.pairwise;
+
+  /* ---------------- Model Data ---------------- */
+  const modelNames=['PyramidFlow','vchitect_2.0','cogvideo_5b','easyanimate_5.1','hunyuan','ltx_video','mochi','wan_1b','wan_14b','luma_ray_2','minimax','pika_2.2'];
+  const modelDisplay={PyramidFlow:'Pyramid Flow','vchitect_2.0':'VChitect 2.0',cogvideo_5b:'CogVideo 5B','easyanimate_5.1':'EasyAnimate 5.1',hunyuan:'Hunyuan',ltx_video:'LTX Video',mochi:'Mochi',wan_1b:'Wan 1B',wan_14b:'Wan 14B',luma_ray_2:'Luma Ray 2',minimax:'Minimax','pika_2.2':'Pika 2.2'};
+
+  /* -------------------- Scripts Prompts -------------------- */
+  const scriptPages=[
+    {id:'00011',prompt:'Inside a busy street corner, during the day, a street vendor gestures energetically while serving a hot dog to a customer. Meanwhile, hurried pedestrians navigate the crowded sidewalk, and a cyclist carefully maneuvers through slow-moving traffic in the background.',meta:'Concurrent Actions'},
+    {id:'00051',prompt:'At a wedding reception, the bride starts tossing her bouquet over her shoulder as, simultaneously, a group of bridesmaids begins jostling for position to catch it.',meta:'Overlapping Actions'},
+    {id:'00065',prompt:'In a park, a street performer juggles three brightly colored balls, maintaining a smooth, repeating cascade pattern.',meta:'Cyclic Actions'},
+    {id:'00114',prompt:'Medium shot of a lone astronaut planting a flag on the surface of Mars. The Earth hangs small in the black sky. Text appears etched onto the flagpole base: “For All Mankind”. The text remains visible as the shot holds.',meta:'Text Generation'},
+    {id:'00145',prompt:'Two friends drive down a sunny desert highway in a convertible, wind in their hair. The passenger suddenly points off-road with wide eyes, “Whoa! Is that... a giant ball of yarn? We have to-- stop!”',meta:'Dialogues'},
+    {id:'00206',prompt:'In a small and otherwise barren park, amid cold daylight, a lone figure of an old man sits crouched on a swing. He looks up and frowns at the tears escaping his closed eyelids.',meta:'Emotion – Sadness'},
+    {id:'00740',prompt:'Daytime in a quiet suburban kitchen; a woman turns around and freezes, her eyes fixed on an open backdoor gently swinging.',meta:'Emotion – Surprise'},
+    {id:'01103',prompt:'At a desolate train platform, a small group of conspirators clusters around a cryptic map, their anxious eyes scanning their surroundings in a silent agreement of urgency',meta:'Genre – Thriller'},
+    {id:'00469',prompt:'During a lively outdoor concert in the park, a man offers his hand to a woman standing alone, inviting her to dance with him under the starlit sky.',meta:'Genre – Romance'},
+    {id:'00350',prompt:'Inside a cramped elevator, a woman carrying an enormous bouquet of balloons accidentally pops one, causing a chain reaction of popping balloons and startled yelps, with the petals covering every surface of the small space.',meta:'Genre – Comedy'}
+  ];
+
+  /* -------------------- Visuals Prompts -------------------- */
+  const visualPages=[
+      {id:'00078',prompt:'Bright spray paint lifts off a concrete wall, streaming back into the nozzle of a spray can held by a figure whose arm moves in a swift, reversed motion, captured with a wide lens and hard shadows cast by direct light, the scene bathed in cool tones as a tracking shot follows the paint\'s trajectory, flickering light emphasizing the can\'s metallic gleam.',meta:'Cinematographer – Easy'},
+      {id:'00362',prompt:'A woman with long braided hair sprints with primal urgency along a rocky beach at dusk, the shore\'s churning waves to her right rendered in cool desaturated blues and grays under an overcast sky. Her eyes remain locked on an inflatable raft being violently tugged seaward as she maintains perfect parallel motion with the crashing surf, bare feet pounding wet sand in a wide tracking shot stabilized for fluid movement. A man and two bounding dogs mirror her path slightly upshore, their elongated shadows stretching toward the treeline in hard chiaroscuro from low-key sidelighting. The pursuing wave she races beside temporarily swallows driftwood and seabirds before retreating, its foamy fingers clawing at gnarled pine roots marking the high tide line.',meta:'Director – Easy'},
+      {id:'00535',prompt:'An old-fashioned rotary phone with a weathered Bakelite body sits atop a bedside table of pale, distressed wood, its high-contrast silhouette sharp against the muted sepia tones of an otherwise empty room. The relentless ringing reverberates through negative space where dusk light slants through half-drawn curtains, casting long diagonal shadows that stretch toward a vacant bedframe.',meta:'Production Designer – Easy'},
+      {id:'00775',prompt:'In a tense saloon lit by flickering tungsten bulbs casting hard shadows through direct side lighting, a medium close-up two-shot frames a cowboy slamming his fist onto the weathered oak table, shallow depth of field at wide aperture isolating his snarling face against blurred background bottles. A dolly pushes in slowly as Dutch angle tension builds, warm backlight sculpting pistol smoke drifting through shafts of artificial gloom, the rival\'s fearful eyes reflected in a whiskey glass foreground element under crisp medium ISO exposure.',meta:'Cinematographer – Hard'},
+      {id:'00799',prompt:'Inside a caf\u00e9 at midday, warm-toned amber and walnut hues wrap patrons frozen mid-action\u2014hands hovering over steaming mugs\u2014as sudden rain streaks floor-to-ceiling windows. A medium-full shot slowly pans right across linen-draped worn oak tables arranged in rule-of-thirds harmony, backlight from the storm casting silhouettes against the cascading water while overcast daylight etches deepening shadows across startled faces.',meta:'Director – Easy'},
+      {id:'00895',prompt:'A candle flame flickers gently atop a romantic dinner table for two on a cliffside at dusk, overlooking the ocean. The weathered teakwood table supports polished silver tableware and ivory linen with subtle grid-pattern embroidery, accompanied by beeswax candles in hammered brass holders. A deep navy table runner mirrors the darkening horizon where indigo waves break against distant rocks. Warm amber candlelight contrasts with cool twilight tones, as the table\u2019s horizontal lines perfectly align with the ocean\u2019s horizon under a rule-of-thirds sky. Crystal wine glasses catch the dancing light while salt-tinged air ruffles crisp, triangular folded napkins, their motion softened by coastal winds. A single gardenia blossom rests between the settings, its waxy petals glowing golden against the matte linen as dusk transforms the sky from burnt sienna to violet.',meta:'Production Designer – Hard'},
+      {id:'01128',prompt:'On an overgrown forest path, two adventurers share a lighthearted moment as one dramatically lifts a moss-covered artifact while the other laughs in pure delight, captured with a wide lens at wide aperture to isolate their interaction amidst the dense foliage. The camera arcs around them in a medium-full two shot, maintaining a shallow depth of field that renders the sun-dappled forest background as soft bokeh. Golden Hour light filters through the canopy at NEUTRAL, casting warm side light that sculpts their faces and a subtle backlight to separate them from the environment. Diffused shadows created by overhead foliage pattern the ground, while a slight Dutch tilt amplifies the scene\'s playful energy as the artifact catches a glint of directional sunlight.',meta:'Cinematographer – Hard'},
+      {id:'00012',prompt:'On a sprawling lawn in the day, a family unpacks a picnic basket onto a blanket, captured in a wide master shot with a deep depth of field using a wide lens with a narrow aperture. A dolly-mounted camera glides horizontally at knee height, panning smoothly between the picnic setup and two children tossing a frisbee back and forth, their motion frozen crisply with a fast shutter speed. The low ISO exposure maintains clarity across the sunlit scene, while the composition strategically frames the jogger\'s steady path along the grass border within the same continuous shot.',meta:'Cinematographer – Hard'},
+      {id:'00044',prompt:'In a dimly lit, damp basement with peeling paint and moss-streaked concrete walls under high contrast shadows, a single water droplet falls with metronomic precision from a corroded copper pipe. Captured in shallow depth of field, it lands squarely on a 1940s-era electrical fuse box with rusted iron panels at frame right, beneath a lone tungsten bulb casting hard, jagged shadows. As sparks erupt in a crackling horizontal arc from the ruptured casing, malfunctioning circuitry floods the foreground with erratic cyan bursts while the bulb\u2019s death throes reveal layers of peeling insulation and crumbling brick. A slow camera tilt ascends from the sparking fuse box up the dripping pipe, and as the final light fades, the frame plunges into inky darkness punctuated only by fading orange embers',meta:'Director – Hard'},
+      {id:'00236',prompt:'In a dimly lit Victorian-inspired study with mahogany paneling and heavy velvet drapes, a man in a tailored charcoal suit stands silhouetted against a grand arched window framing a rain-streaked metropolis glittering with midnight blue city lights. He swirls amber whiskey in a lead-crystal tumbler, the liquid catching golden highlights from a brass desk lamp illuminating a cracked silver frame holding a vibrant family photograph - its sunlit yellows and grass greens glaringly discordant with the study\'s burgundy-and-gold color scheme. The clawfoot desk beneath bears witness to neglect, its polished surface marred by water rings and clustered with relics of better days: a pocket watch chain spilling from a leather-bound ledger, cigar ashes dusting a jade paperweight, the photograph\'s fractured glass reflecting distorted fragments of a smiling woman and child.',meta:'Production Designer – Hard'},
+      {id:'00442',prompt:'In a zero-gravity training facility with high-tech metallic surfaces, astronaut candidates wearing form-fitting compression suits navigate floating aluminum obstacle modules. A fisheye lens exaggerates the curved geometry of magnetic training panels suspended in grid formation, while a stabilizer-mounted camera tracks laterally with a candidate mid-maneuver \u2013 capturing their flailing limbs reflected in glossy safety padding. Cool LEDs cast sharp geometric shadows across faces beaded with sweat, their determined grimaces backlit by floating warning beacons that paint crimson streaks across the chrome environment.',meta:'Director – Hard'},
+      {id:'00461',prompt:'In a bustling university hallway during a lively graduation ceremony, captured with a Medium lens and shallow depth of field to isolate the pair from the chaotic background, a proud father and his accomplished daughter share a spontaneous, heartfelt hug in close-up framing. The camera executes a gentle push-in movement on a stabilizer, compressing the emotional space between them as celebratory crowds blur into abstract shapes of color and motion.',meta:'Camera – Easy'}
+    ];
+
+  /* ---------------- Cinematography reference (images) ---------------- */
+  const categories={
+    angles:['dutch-right.jpeg','eye-level.jpeg','ground-level.jpeg','HA.jpeg','hip-level.jpeg','knee-level.jpeg','LA.jpeg','overhead.jpeg','shoulder-level.jpeg'],
+    shot:['WS.jpeg','MS.jpeg','FS.jpeg','CU.jpeg','ECU.jpeg','MCU.jpeg'],
+    Depth_of_Field:['deep-focus.jpeg','shallow-focus.jpeg','rack-focus.jpeg','soft-focus.jpeg','split-diopter.jpeg','tilt-shift.jpeg'],
+    framing:['single.jpeg','2-shot.jpeg','pov.jpeg','OTS.jpeg'],
+    'soft-lighting':['high-key-1.png','high-key-2.jpeg','high-key-3.png','high-key-4.png','high-key-5.png','high-key-6.png','high-key-7.png','high-key-8.png'],
+    'hard-lighting':['0.png','1.png','2.png','3.png','4.png','5.png','6.png','7.png'],
+    'setup_balance':['rot.jpg','rot2.jpg','rot3.jpg','symmetry.webp','symmetry2.jpeg','symmetry3.webp'],
+    'setup_lines_shapes':['line1.jpg','line2.jpg','line3.jpg','line4.jpg','line5.jpg','line6.jpg']
+  };
+  const categoryDisplay={
+    angles:'Camera Angle', shot:'Camera Shot Size', Depth_of_Field:'Camera Depth of Field',
+    framing:'Camera Framing','soft-lighting':'Soft Lighting','hard-lighting':'Hard Lighting',
+    'setup_balance':'Setup Balance','setup_lines_shapes':'Setup Lines and Shapes'
+  };
+  const imageLabels={
+    angles:{'dutch-right.jpeg':'Dutch Right','eye-level.jpeg':'Eye Level','ground-level.jpeg':'Ground Level','HA.jpeg':'High Angle','hip-level.jpeg':'Hip Level','knee-level.jpeg':'Knee Level','LA.jpeg':'Low Angle','overhead.jpeg':'Overhead','shoulder-level.jpeg':'Shoulder Level'},
+    shot:{'WS.jpeg':'Wide Shot','MS.jpeg':'Medium Shot','FS.jpeg':'Full Shot','CU.jpeg':'Close Up','ECU.jpeg':'Extreme Close Up','MCU.jpeg':'Medium Close Up'},
+    Depth_of_Field:{'deep-focus.jpeg':'Deep Focus','shallow-focus.jpeg':'Shallow Focus','rack-focus.jpeg':'Rack Focus','soft-focus.jpeg':'Soft Focus','split-diopter.jpeg':'Split Diopter','tilt-shift.jpeg':'Tilt Shift'},
+    framing:{'single.jpeg':'Single Shot','2-shot.jpeg':'2 Shot','pov.jpeg':'PoV','OTS.jpeg':'Over the Shoulder'}
+  };
+  const noLabelCats=['soft-lighting','hard-lighting','setup_balance','setup_lines_shapes'];
+
+  /* -------------- Utilities -------------- */
+  const cacheScripts={},cacheVisuals={};
+  const shuffle=a=>{const arr=[...a];for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;};
+  async function pickModels(id,f,need){const s=shuffle(modelNames),c=[];for(const m of s){if(await fetch(`${f}${m}_${id}.mp4`,{method:'HEAD'}).then(r=>r.ok).catch(()=>false))c.push(m);if(c.length===need)break;}return c;}
+  async function getModels(id,f,need,cache){if(cache[id])return cache[id];return cache[id]=await pickModels(id,f,need);}
+  const grid=(mods,f,id,cols)=>`<div class="grid grid-cols-${cols} gap-0 hide-scrollbar">`+
+    mods.map(m=>`<div class="relative group w-full h-40 md:h-48 overflow-hidden border border-gray-200"><video src="${f}${m}_${id}.mp4" muted loop playsinline class="object-cover w-full h-full"></video><span class="absolute inset-x-0 bottom-0 bg-black/70 text-center text-xs p-1 text-white">${modelDisplay[m]||m}</span></div>`).join('')+
+  '</div>';
+
+  /* -------------- Scripts rendering -------------- */
+  let idxS=0;
+  const wrapS=document.getElementById('carousel-wrapper'),
+        prS =document.getElementById('promptBox');
+  async function renderS(){
+    wrapS.innerHTML='<span class="has-text-grey">Loading videos…</span>';
+    const p=scriptPages[idxS], f=`assets/scine_scripts/${p.id}/`,
+          mods=await getModels(p.id,f,9,cacheScripts);
+    wrapS.innerHTML=grid(mods,f,p.id,3);
+    prS.innerHTML = `${p.prompt} <span class="has-text-grey">(${p.meta})</span>`;
+    wrapS.querySelectorAll('video').forEach(v=>v.play().catch(()=>{}));
+  }
+  document.getElementById('prevBtn').onclick=()=>{idxS=(idxS-1+scriptPages.length)%scriptPages.length;renderS();};
+  document.getElementById('nextBtn').onclick=()=>{idxS=(idxS+1)%scriptPages.length;renderS();};
+
+  /* -------------- Visuals rendering -------------- */
+  let idxV=0;
+  const wrapV=document.getElementById('visuals-carousel-wrapper'),
+        prV =document.getElementById('visuals-promptBox');
+  async function renderV(){
+    wrapV.innerHTML='<span class="has-text-grey">Loading videos…</span>';
+    const p=visualPages[idxV], f=`assets/scine_visuals/${p.id}/`,
+          mods=await getModels(p.id,f,6,cacheVisuals);
+    wrapV.innerHTML=grid(mods,f,p.id,3);
+    prV.innerHTML = `${p.prompt} <span class="has-text-grey">(${p.meta})</span>`;
+    wrapV.querySelectorAll('video').forEach(v=>v.play().catch(()=>{}));
+  }
+  document.getElementById('prevVisBtn').onclick=()=>{idxV=(idxV-1+visualPages.length)%visualPages.length;renderV();};
+  document.getElementById('nextVisBtn').onclick=()=>{idxV=(idxV+1)%visualPages.length;renderV();};
+
+  /* -------------- Pairwise loader -------------- */
+  let pairIdx=0, pairData=[];
+  fetch('assets/pairwise/pairwise_manifest.json')
+    .then(r=>r.json())
+    .then(json=>{pairData=json; renderPair();})
+    .catch(err=>{
+      document.getElementById('pair-wrapper').innerHTML=
+        `<span class="has-text-danger">Failed to load pairwise data: ${err}</span>`;
+    });
+  document.getElementById('prevPair').onclick=()=>{pairIdx=(pairIdx-1+pairData.length)%pairData.length;renderPair();};
+  document.getElementById('nextPair').onclick=()=>{pairIdx=(pairIdx+1)%pairData.length;renderPair();};
+
+  function metaToHTML(metaText){
+    const rows = metaText.trim().split('\n').map(r=>r.split('|').map(c=>c.trim()));
+    if(rows.length<2) return '<p class="is-size-7 has-text-grey">No metadata.</p>';
+    const th  = rows[0].map(h=>`<th class="px-3 py-1 has-text-left has-text-weight-semibold is-size-7 md:is-size-6 border-b">${h}</th>`).join('');
+    const trs = rows.slice(1).map(r=>`<tr>${r.map(c=>`<td class="px-3 py-1 align-top is-size-7 md:is-size-6 border-b">${c}</td>`).join('')}</tr>`).join('');
+    return `<table class="w-full text-left border-collapse"><thead><tr>${th}</tr></thead><tbody>${trs}</tbody></table>`;
+  }
+  function renderPair(){
+    if(!pairData.length) return;
+    const p=pairData[pairIdx], base=`assets/pairwise/${p.id}/`;
+    const vid = (file,label)=>`
+      <div class="relative group w-full border border-gray-200 overflow-hidden">
+        <video src="${base}${file}" muted loop playsinline class="object-cover w-full h-64 md:h-80"></video>
+        <span class="absolute inset-x-0 bottom-0 has-background-black-ter has-text-white has-text-centered is-size-7 p-1">
+          ${modelDisplay[label]||label}
+        </span>
+      </div>`;
+    document.getElementById('pair-wrapper').innerHTML = vid(p.videoA,p.modelA) + vid(p.videoB,p.modelB);
+    document.getElementById('pair-prompt').textContent = p.prompt;
+    document.getElementById('pair-meta-body').innerHTML = metaToHTML(p.meta);
+    document.querySelectorAll('#pair-wrapper video').forEach(v=>v.play().catch(()=>{}));
+  }
+
+  /* -------------- Initial renders -------------- */
+  renderS();
+  renderV();
+})();
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  /* ------------ Ensure hero IDs exist ------------ */
+  const heroTop = document.querySelector('section.hero:not(.teaser)');
+  if (heroTop && !heroTop.id) heroTop.id = 'overview';
+  const teaser = document.querySelector('section.hero.teaser');
+  if (teaser && !teaser.id) teaser.id = 'taxonomies';
+
+  /* ------------ Build the TOC ------------ */
+  const toc = document.getElementById('page-toc');
+  const list = document.getElementById('page-toc-list');
+  if (!toc || !list) return;
+
+  const items = [
+    { id: 'overview',    label: 'Overview' },
+    { id: 'taxonomies',  label: 'Taxonomies' },
+    { id: 'abstract',    label: 'Abstract' },
+    { id: 'benchmark',   label: 'The Stable Cinemetrics Benchmark' },
+    { id: 'qualitative', label: 'Qualitative Results' },
+    { id: 'quantitative',label: 'Quantitative Results' },
+    { id: 'vlm',         label: 'Automatic Evaluator' },
+    { id: 'ack',         label: 'Acknowledgements' }
+  ].filter(x => document.getElementById(x.id)); // only include existing sections
+
+  list.innerHTML = items
+    .map(x => `<li><a href="#${x.id}" data-target="${x.id}">${x.label}</a></li>`)
+    .join('');
+
+  const links = list.querySelectorAll('a[data-target]');
+  function setActive(id){
+    links.forEach(a => a.classList.toggle('is-active', a.getAttribute('data-target') === id));
+  }
+
+  /* ------------ Smooth scroll (no double jump) ------------ */
+  const OFFSET = 90;     // matches your scroll-margin / header height
+  const DURATION = 450;  // ms
+  let isProgrammatic = false;
+
+  function smoothScrollTo(el){
+    const start = window.scrollY;
+    const targetTop = Math.max(0, el.getBoundingClientRect().top + window.scrollY - OFFSET);
+    const delta = targetTop - start;
+    const t0 = performance.now();
+    isProgrammatic = true;
+
+    function step(t){
+      const p = Math.min(1, (t - t0) / DURATION);
+      const e = p < .5 ? 2*p*p : -1 + (4 - 2*p)*p; // easeInOutQuad
+      window.scrollTo(0, start + delta * e);
+      if (p < 1) requestAnimationFrame(step);
+      else setTimeout(() => { isProgrammatic = false; }, 50);
+    }
+    requestAnimationFrame(step);
+  }
+
+  links.forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const id = a.getAttribute('data-target');
+      const el = document.getElementById(id);
+      if (!el) return;
+      // update URL without letting browser perform native jump
+      history.pushState(null, '', '#' + id);
+      setActive(id);
+      smoothScrollTo(el);
+
+      // close ToC on mobile if open
+      const btn = document.getElementById('toc-toggle');
+      if (window.innerWidth <= 1100 && btn) {
+        toc.style.display = 'none';
+        btn.setAttribute('aria-expanded','false');
+      }
+    });
+  });
+
+  /* ------------ Scrollspy (paused during programmatic scroll) ------------ */
+  const observed = items.map(x => document.getElementById(x.id)).filter(Boolean);
+  const obs = new IntersectionObserver((entries) => {
+    if (isProgrammatic) return;
+    // pick the entry nearest the top
+    const vis = entries
+      .filter(e => e.isIntersecting)
+      .sort((a,b) => a.boundingClientRect.top - b.boundingClientRect.top);
+    if (vis[0]) setActive(vis[0].target.id);
+  }, { rootMargin: '-40% 0px -55% 0px', threshold: [0, 0.01, 0.25, 0.5] });
+  observed.forEach(el => obs.observe(el));
+
+  /* ------------ Mobile toggle ------------ */
+  const toggleBtn = document.getElementById('toc-toggle');
+  function setTocVisibility(){
+    if (window.innerWidth > 1100) {
+      toc.style.display = 'block';            // desktop: always visible
+      toggleBtn && toggleBtn.setAttribute('aria-expanded','true');
+    } else {
+      toc.style.display = 'none';             // mobile: hidden until toggled
+      toggleBtn && toggleBtn.setAttribute('aria-expanded','false');
+    }
+  }
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      const expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+      const show = !expanded;
+      toc.style.display = show ? 'block' : 'none';
+      toggleBtn.setAttribute('aria-expanded', show ? 'true' : 'false');
+    });
+  }
+  window.addEventListener('resize', setTocVisibility);
+  setTocVisibility();
+
+  /* ------------ Activate current hash on load (optional) ------------ */
+  const initial = location.hash && location.hash.slice(1);
+  if (initial && document.getElementById(initial)) {
+    setActive(initial);
+  } else if (items[0]) {
+    setActive(items[0].id);
+  }
+});
+</script>
+
 </body>
 </html>
