@@ -71,20 +71,60 @@
     .hero.teaser .swiper-button-prev,
     .hero.teaser .swiper-button-next { display: none !important; }
 
-    /* --- Title typography --- */
-    .title.is-1.publication-title { font-weight: 400 !important; font-family: 'Inter',system-ui,-apple-system, Segoe UI, Roboto, Arial, sans-serif; }
-    .scine-title { font-weight: 800 !important; }
-    .scine-subtitle { font-weight: 400 !important; color: #3b3b3b; }
+    /* ===== Consistent hero title + authors across breakpoints ===== */
+.title.is-1.publication-title{
+  font-size: clamp(2.2rem, 2.1vw + 1.4rem, 3rem) !important;
+  line-height: 1.15 !important;
+  letter-spacing: 0 !important;
+  margin-bottom: 0.75rem !important;
+}
+.scine-title,
+.scine-subtitle{
+  display: block;
+}
+.scine-subtitle{
+  font-weight: 400 !important;
+  color: #3b3b3b;
+  margin-top: .15rem;
+}
 
-    /* Author / affiliation line */
-    .author-line, .affil-line { margin-top: .75rem; }
-    .author-line { font-size: 1.05rem; color: #2f2f2f; }
-    .author-line a { color: #2f2f2f; text-decoration: none; }
-    .author-line a:hover { text-decoration: underline; }
-    .author-line .sep { margin: 0 .5rem; opacity: .5; }
-    .sup { vertical-align: super; font-size: .65em; margin-left: .15em; }
-    .affil-line { color: #555; font-size: .95rem; }
-    .affil-line .bullet { margin: 0 .6rem; opacity: .5; }
+/* Hide sidebar ToC while hero is in view (desktop only) */
+#page-toc.toc-hidden{
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
+  transition: opacity .15s ease, transform .15s ease;
+}
+
+
+/* Authors */
+.author-line{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .35rem .6rem;
+  font-size: 1.05rem;
+  color: #2f2f2f;
+  margin-top: .75rem;
+}
+.author-line a{ color:#2f2f2f; text-decoration:none; }
+.author-line a:hover{ text-decoration:underline; }
+.author-line .sep{ display:none; }   /* prevents awkward separators on wrap */
+
+/* Affiliations */
+.affil-line{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .35rem .6rem;
+  color: #555;
+  font-size: .95rem;
+  margin-top: .75rem;
+}
+.affil-line .bullet{ display:none; } /* optional: hide bullets for clean wraps */
+
+.sup{ vertical-align: super; font-size: .65em; margin-left: .15em; }
+
 
     /* Base typography / canvas */
     body { background: #f5f5f7; line-height: 1.6; font-family: 'Noto Sans', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
@@ -160,9 +200,9 @@
     /* ===== ToC (top-left) ===== */
     #page-toc {
       position: fixed;
-      top: 90px;               /* nudge under your hero title */
+      top: clamp(130px, 14vh, 220px);             
       left: 12px;
-      width: 220px;
+      width: 200px;
       z-index: 50;
       background: #fff;
       border: 1px solid #e5e7eb;
@@ -197,10 +237,47 @@
     /* Show/hide button for small screens */
     #toc-toggle { display: none; }
 
-    @media (max-width: 1100px){
-      #page-toc { display: none; }   /* ToC hidden on small screens */
-      #toc-toggle { display: inline-block; }  /* Toggle visible only here */
-    }
+    @media (max-width: 1280px){
+  /* Hide sidebar ToC on small/medium screens */
+  #page-toc{ display: none; }
+
+  /* Show a floating action button to open ToC */
+  #toc-toggle{
+    display: inline-flex;
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    z-index: 60;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 9999px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    box-shadow: 0 6px 18px rgba(0,0,0,.12);
+  }
+
+  /* When opened via JS, present ToC as a bottom sheet panel */
+  #page-toc.is-mobile-panel{
+    display: block;
+    position: fixed;
+    left: 0; right: 0;
+    bottom: 0;
+    top: auto;
+    width: auto;
+    max-height: 55vh;
+    overflow: auto;
+    margin: 0;
+    border-radius: 16px 16px 0 0;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 -10px 24px rgba(0,0,0,.16);
+    padding: 12px 14px 10px;
+    z-index: 70;
+  }
+  #page-toc.is-mobile-panel h4{ margin-bottom: 8px; }
+  #page-toc.is-mobile-panel a{ padding: 10px 10px; }
+}
+
 
     /* Smooth anchor position when scrolled (avoids heading underlap) */
     section, .hero { scroll-margin-top: 90px; }
@@ -223,8 +300,8 @@
           <div class="column has-text-centered">
 
             <h1 class="title is-1 publication-title">
-              <span class="scine-title">Stable Cinemetrics</span>
-              <span class="scine-subtitle">: Structured Taxonomy and Evaluation for Professional Video Generation</span>
+              <span class="scine-title">Stable Cinemetrics:</span>
+              <span class="scine-subtitle">Structured Taxonomy and Evaluation for Professional Video Generation</span>
             </h1>
 
             <div class="author-line">
@@ -897,8 +974,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     {
                       "name": "Spatial Locations", "value": "Specifies the placement of objects in relation to the viewer, distinguishing foreground, midground, and background areas.",
                       "children": [
-                        { "name": "Positional Accuracy", "value": "The absolute position of an object or a subject in a scene" },
-                        { "name": "Relative Positioning", "value": "The relative positioning of an object in relationship to other objects in the scene." }
+                        { "name": "Positional Acc.", "value": "The absolute position of an object or a subject in a scene" },
+                        { "name": "Relative Pos.", "value": "The relative positioning of an object in relationship to other objects in the scene." }
                       ]
                     },
                     { "name": "Depth", "value": "Controls the perception of distance between elements, enhancing the three-dimensional feel of the scene." }
@@ -1321,7 +1398,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 'overview',    label: 'Overview' },
     { id: 'taxonomies',  label: 'Taxonomies' },
     { id: 'abstract',    label: 'Abstract' },
-    { id: 'benchmark',   label: 'The Stable Cinemetrics Benchmark' },
+    { id: 'benchmark',   label: 'Benchmark' },
     { id: 'qualitative', label: 'Qualitative Results' },
     { id: 'quantitative',label: 'Quantitative Results' },
     { id: 'vlm',         label: 'Automatic Evaluator' },
@@ -1372,10 +1449,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // close ToC on mobile if open
       const btn = document.getElementById('toc-toggle');
-      if (window.innerWidth <= 1100 && btn) {
+      if (window.innerWidth <= 1280 && btn) {
         toc.style.display = 'none';
+        toc.classList.remove('is-mobile-panel');
         btn.setAttribute('aria-expanded','false');
-      }
+    }
     });
   });
 
@@ -1391,27 +1469,89 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { rootMargin: '-40% 0px -55% 0px', threshold: [0, 0.01, 0.25, 0.5] });
   observed.forEach(el => obs.observe(el));
 
-  /* ------------ Mobile toggle ------------ */
-  const toggleBtn = document.getElementById('toc-toggle');
-  function setTocVisibility(){
-    if (window.innerWidth > 1100) {
-      toc.style.display = 'block';            // desktop: always visible
-      toggleBtn && toggleBtn.setAttribute('aria-expanded','true');
-    } else {
-      toc.style.display = 'none';             // mobile: hidden until toggled
-      toggleBtn && toggleBtn.setAttribute('aria-expanded','false');
+
+/* ------------ Mobile toggle (bottom sheet) + desktop hide-until-clear ------------ */
+// reuse 'toc' from above
+const toggleBtn = document.getElementById('toc-toggle');
+const heroTopEl = document.querySelector('section.hero:not(.teaser)');
+const teaserEl  = document.querySelector('section.hero.teaser');
+
+
+function setTocVisibility(){
+  if (window.innerWidth > 1280) {
+    // Desktop: sidebar mode
+    toc.classList.remove('is-mobile-panel');
+    toc.style.display = 'block';
+    if (toggleBtn){
+      toggleBtn.style.display = 'none';
+      toggleBtn.setAttribute('aria-expanded','false');
+    }
+    applyDesktopHideRule(); // ensure correct hidden/visible state
+  } else {
+    // Small/medium: FAB + bottom sheet
+    toc.style.display = 'none';
+    if (toggleBtn){
+      toggleBtn.style.display = 'inline-flex';
+      toggleBtn.setAttribute('aria-expanded','false');
     }
   }
-  if (toggleBtn) {
-    toggleBtn.addEventListener('click', () => {
-      const expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
-      const show = !expanded;
-      toc.style.display = show ? 'block' : 'none';
-      toggleBtn.setAttribute('aria-expanded', show ? 'true' : 'false');
-    });
+}
+
+// Hide sidebar ToC until the user has scrolled past the hero title area
+function applyDesktopHideRule(){
+  if (window.innerWidth <= 1280) {
+    toc.classList.remove('toc-hidden');
+    return;
   }
-  window.addEventListener('resize', setTocVisibility);
-  setTocVisibility();
+
+  // Heights of both hero sections
+  const h1 = heroTopEl ? heroTopEl.offsetHeight : 0;
+  const h2 = teaserEl  ? teaserEl.offsetHeight  : 0;
+
+  // When scrolled past BOTH (tweak buffer if you want)
+  const clearY = h1 + h2 - 100;
+
+  if (window.scrollY < clearY) toc.classList.add('toc-hidden');
+  else toc.classList.remove('toc-hidden');
+}
+
+
+if (toggleBtn) {
+  toggleBtn.addEventListener('click', () => {
+    const expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+    if (expanded) {
+      // Close bottom sheet
+      toc.style.display = 'none';
+      toc.classList.remove('is-mobile-panel');
+      toggleBtn.setAttribute('aria-expanded','false');
+    } else {
+      // Open bottom sheet
+      toc.classList.add('is-mobile-panel');
+      toc.style.display = 'block';
+      toggleBtn.setAttribute('aria-expanded','true');
+    }
+  });
+}
+
+// Close bottom sheet after clicking a link (mobile/tablet)
+document.getElementById('page-toc-list')?.addEventListener('click', (e) => {
+  const link = e.target.closest('a[data-target]');
+  if (!link) return;
+  if (window.innerWidth <= 1280 && toggleBtn){
+    toc.style.display = 'none';
+    toc.classList.remove('is-mobile-panel');
+    toggleBtn.setAttribute('aria-expanded','false');
+  }
+});
+
+window.addEventListener('resize', () => { setTocVisibility(); });
+window.addEventListener('scroll', () => { applyDesktopHideRule(); });
+
+// Run once on load
+setTocVisibility();
+// fonts can change hero height; run again shortly after load
+setTimeout(applyDesktopHideRule, 300);
+
 
   /* ------------ Activate current hash on load (optional) ------------ */
   const initial = location.hash && location.hash.slice(1);
