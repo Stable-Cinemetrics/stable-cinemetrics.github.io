@@ -255,8 +255,15 @@
               <span class="sup">3</span> Google DeepMind
             </div>
 
-            <br>
-            <span class="link-block"><a href="#" class="button is-normal is-rounded is-dark"><span class="icon"><i class="ai ai-arxiv"></i></span><span>Paper</span></a></span>
+          <br>
+          <span class="link-block">
+            <a href="#" class="button is-normal is-rounded is-dark" style="height: 2.25em; display: inline-flex; align-items: center;">
+              <span class="icon"><i class="ai ai-arxiv"></i></span>
+              <span>Paper</span>
+            </a>
+          </span>
+
+
           </div>
         </div>
       </div>
@@ -382,6 +389,10 @@
             <button class="taxonomy-tab" role="tab" aria-selected="false"
                     data-image="assets/images/categories/events.png">
               Events
+            </button>
+            <button class="taxonomy-tab" role="tab" aria-selected="false"
+                    data-image="assets/images/categories/all.png">
+              All
             </button>
           </div>
 
@@ -533,7 +544,7 @@
             <p>We also develop a Vision-Language Model that surpasses baseline models in alignment with expert annotations for evaluating professional video generation.</p>
           </div>
           <div class="column">
-            <img src="static/images/vlm.png" alt="Automatic Evaluation Graph" loading="lazy">
+            <img src="assets/images/vlm.png" alt="Automatic Evaluation Graph" loading="lazy">
           </div>
         </div>
       </div>
@@ -547,7 +558,7 @@
         <div class="column is-four-fifths has-text-centered">
           <h2 class="title is-3">Acknowledgements</h2>
           <div class="content has-text-justified">
-            <p>Ack</p>
+            <p>We thank Robert Legato, Hanno Basse and Heather Ferreira for their valuable input on our work. We are also grateful to the team at MovieLabs for their feedback on our taxonomies. A special thanks to Cedric Wagrez for his invaluable assistance with the annotations! </p>
           </div>
         </div>
       </div>
@@ -873,7 +884,7 @@ document.addEventListener('DOMContentLoaded', () => {
                       "name": "Shapes", "value": "Focuses on the geometric forms present in the composition, both regular and organic.",
                       "children": [
                         { "name": "Regular", "value": "Structured, geometric forms such as squares, circles, and triangles that add order to the design." },
-                        { "name": "Natural", "value": "Unstrucuted shapes that naturally emerge in the scene, without any geometric constraints" }
+                        { "name": "Natural", "value": "Unstructured shapes that naturally emerge in the scene, without any geometric constraints" }
                       ]
                     },
                     { "name": "Balance", "value": "Refers to the distribution of visual weight across the composition, ensuring a harmonious layout." }
@@ -978,7 +989,7 @@ document.addEventListener('DOMContentLoaded', () => {
               "name": "Exposure",
               "value": "Exposure controls the amount of light captured by the camera sensor.",
               "children": [
-                { "name": "Aperture", "value": "The camera lens opening that controls the amount of light propagaated through the camera." },
+                { "name": "Aperture", "value": "The camera lens opening that controls the amount of light propagated through the camera." },
                 { "name": "Shutter Speed", "value": "The duration for which the camera sensor is exposed to light." },
                 { "name": "ISO", "value": "Sensitivity of the camera sensor to light." }
               ]
@@ -1064,7 +1075,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const data4 = {
       "name": "Events",
-      "value": "This category covers all sorts of events happening in the scene, along with its granular details",
+      "value": "This category covers all types of events happening in the scene, along with its granular details",
       "children": [
         {
           "name": "Types",
