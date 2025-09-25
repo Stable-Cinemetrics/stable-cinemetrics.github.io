@@ -40,8 +40,14 @@
     @media (max-width: 1280px) {
       .hero.teaser .container { max-width: min(95vw, 1080px); }
     }
-    .hero.teaser .mySwiper .swiper-slide { width: 100%; padding: 18px 22px; }
-
+    
+    .tax-hint{
+  margin: .35rem 0 .75rem;
+  font-size: .875rem;          /* a bit smaller than body */
+  color: #6b7280;              /* neutral gray */
+  letter-spacing: .15px;
+  opacity: .9;                 /* soften it */
+}
     /* --- Taxonomy Tabs: pill segmented control --- */
     .taxonomy-tabs {
       display: flex; justify-content: center; gap: 0;
@@ -71,6 +77,11 @@
     .hero.teaser .swiper-button-prev,
     .hero.teaser .swiper-button-next { display: none !important; }
 
+    .hero.teaser .swiper,
+.hero.teaser .swiper-wrapper,
+.hero.teaser .swiper-slide{
+  min-height: 0;                         /* Safari/Chrome flex scrolling fix */
+}
     /* ===== Consistent hero title + authors across breakpoints ===== */
 .title.is-1.publication-title{
   font-size: clamp(2.2rem, 2.1vw + 1.4rem, 3rem) !important;
@@ -160,10 +171,46 @@
       display: flex; flex-direction: column; align-items: center; justify-content: flex-start; box-sizing: border-box;
     }
 
-    /* Taller taxonomy swiper */
-    .hero.teaser .mySwiper .swiper-slide{
-      position: relative; overflow: hidden; width: 100%; padding: 18px 22px; min-height: auto;
-    }
+    /* Taxonomy wrapper: allow both scrollbars; center small content */
+.hero.teaser .tree-container-wrapper{
+  position: relative;
+  display: flex;                 /* enables visual centering when no overflow */
+  justify-content: center;       /* will be toggled to flex-start by JS when overflowing */
+  align-items: center;           /* will be toggled to flex-start by JS when overflowing */
+  overflow: auto !important;     /* both axes when needed */
+  width: 100%;
+  min-height: 260px;
+  height: min(60vh, 520px); 
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 12px 16px;
+  scrollbar-gutter: stable both-edges;
+}
+
+/* Let the SVG size itself; it must not be constrained by the container */
+.hero.teaser .tree-container-wrapper .tree-svg{
+  display: block;
+  max-width: none !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+/* make SVG keep its intrinsic size as a flex item */
+.hero.teaser .tree-container-wrapper .tree-svg{
+  flex: 0 0 auto;               /* ⬅️ prevents flex-shrink */
+}
+
+/* help touch scrolling on iOS/Android */
+.hero.teaser .tree-container-wrapper{
+  touch-action: pan-x pan-y;     /* allow native touch panning */
+}
+
+
+/* Make sure Swiper doesn't clip the wrapper's scrollbars/content */
+.hero.teaser .mySwiper .swiper-slide{
+  overflow: visible !important;
+}
+
 
     /* Prevent double-smooth (we'll control it in JS) */
     html { scroll-behavior: auto !important; }
@@ -171,7 +218,6 @@
 
     .graph-title { font-size: 1.25rem; font-weight: bold; color: #363636; margin-bottom: 10px; text-align: center; flex: 0 0 auto; }
 
-    .hero.teaser .tree-container-wrapper { position: relative; overflow: visible; padding-top: 36px; padding-left: 24px; height: auto; min-height: 0; } 
 
     .tax-scroll-btn { position: absolute; top: 50%; transform: translateY(-50%); border: 1px solid #d9d9d9; background: rgba(255,255,255,.95); border-radius: 9999px; padding: .35rem .55rem; font-weight: 700; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,.08); z-index: 5; }
     .tax-scroll-btn.left  { left: 8px; }
@@ -354,6 +400,13 @@
         <h4 class="title is-4 has-text-centered">
           <em>Structured taxonomies at the intersection of Generative Video Models and Professional Use, built on the principles of cinematic control.</em>
         </h4>
+        
+        <p class="tax-hint has-text-centered">
+          <span class="is-hidden-touch">Hover nodes for details</span>
+          <span class="is-hidden-desktop">Desktop recommended • Tap nodes for details</span>
+        </p>
+
+
 
         <!-- MAIN TAXONOMY TABS (these control Swiper) -->
         <div class="taxonomy-tabs has-text-centered" role="tablist" aria-label="Taxonomies">
@@ -694,62 +747,121 @@ function attachHorizontalScrollButtons(wrapper){
 function buildTreeForIndex(idx){
   const idByIndex = ['tree-container-2','tree-container-3','tree-container-1','tree-container-4'];
   const dataByIndex = [data2, data3, data1, data4];
+
   const id = idByIndex[idx]; const data = dataByIndex[idx];
   if (!id) return;
   drawTree(id, data);
   requestAnimationFrame(() => {
-    taxonomySwiper.updateSize();
-    taxonomySwiper.updateSlides();
-    taxonomySwiper.updateAutoHeight(300);
-  });
+  taxonomySwiper?.updateSize();
+  taxonomySwiper?.updateSlides();
+});
   const wrapper = document.getElementById(id).closest('.tree-container-wrapper');
-  attachHorizontalScrollButtons(wrapper);
+  // attachHorizontalScrollButtons(wrapper);
 }
 
 function drawTree (svgId, treeData){
   const svg     = d3.select('#'+svgId).html('');
+
+  const _wrap = document.getElementById(svgId)?.closest('.tree-container-wrapper');
+  if (_wrap) delete _wrap.dataset.centered;
+
   const tooltip = d3.select('#tooltip');
 
-  const margin = { top: 40, right: 100, bottom: 40, left: 220 };
-  const xStep  = 180;
-  const yStep  = 32;
+  // compact defaults
+  const FONT_PX  = 12;
+  const CIRCLE_R = 5;
+  const LINK_W   = 1;
+  const BASE_X   = 160;
+  const BASE_Y   = 24;
 
-  const root     = d3.hierarchy(treeData);
-  const nodesAll = root.descendants();
+  const margin = { top: 24, right: 70, bottom: 24, left: 140 };
 
-  const maxDepth = d3.max(nodesAll, d => d.depth) || 0;
-  const depthCounts = {};
-  nodesAll.forEach(d => { depthCounts[d.depth] = (depthCounts[d.depth]||0)+1; });
-  const maxRows = d3.max(Object.values(depthCounts)) || 1;
-
+  // canvas to measure text widths
   const ctx = document.createElement('canvas').getContext('2d');
-  ctx.font = '12px sans-serif';
-  const maxLabelPx = d3.max(nodesAll, d => ctx.measureText(d.data?.name || '').width) || 80;
+  ctx.font = `${FONT_PX}px sans-serif`;
 
-  const RIGHT_GUTTER = Math.ceil(6 * 2 + 12 + maxLabelPx) + 65;
-  const innerTreeWidth = (maxDepth + 1) * xStep;
+  const root = d3.hierarchy(treeData);
+  collapseToLevel(root, 1);
+  root.x0 = 0; root.y0 = 0;
 
-  const width  = innerTreeWidth + RIGHT_GUTTER;
-  const height = Math.max(240, maxRows * yStep + 40);
-
-  svg.attr('width',  width  + margin.left + margin.right)
-     .attr('height', height + margin.top  + margin.bottom);
+  svg.attr('width',  10 + margin.left + margin.right)
+     .attr('height', 10 + margin.top  + margin.bottom);
 
   const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
-  const tree = d3.tree().size([height, innerTreeWidth]);
 
-  collapseToLevel(root, 1);
-  root.x0 = height / 2; root.y0 = 0;
+  const tree = d3.tree().separation((a,b)=> (a.parent===b.parent ? 1 : 1.25));
+
   update(root);
 
   function update(source){
+    // visible nodes only (collapsed ones live in _children)
+    const visNodes = root.descendants();
+    const visLinks = root.links();
+
+    const maxDepth = d3.max(visNodes, d => d.depth) || 0;
+
+    const depthCounts = {};
+    visNodes.forEach(d => { depthCounts[d.depth] = (depthCounts[d.depth]||0)+1; });
+    const maxRows = d3.max(Object.values(depthCounts)) || 1;
+
+    const visibleCount = visNodes.length;
+    const yStep = Math.round(BASE_Y * (visibleCount > 28 ? 1.2 : 1.0));
+    const xStep = Math.round(BASE_X * 0.70); // compact horizontally
+
+    const innerTreeWidth   = Math.max((maxDepth + 1) * xStep, 320);
+    const provisionalHeight= Math.max(140, (maxRows - 1) * yStep + 60);
+
+    // run layout
+    tree.size([provisionalHeight, innerTreeWidth]);
     tree(root);
-    const nodes = root.descendants();
-    const links = root.links();
 
-    const node = g.selectAll('g.node').data(nodes, d => d.id || (d.id = ++__nodeIdCounter));
+    // tighten canvas to actual spread
+    const maxLabelPx  = d3.max(visNodes, d => ctx.measureText(d.data?.name || '').width) || 80;
+    const RIGHT_GUTTER= Math.ceil(6*2 + 12 + maxLabelPx) + 60;
 
-    const nodeEnter = node.enter().append('g')
+    const xExtent = d3.extent(visNodes, d => d.x);
+    const yExtent = d3.extent(visNodes, d => d.y);
+    const minX = xExtent[0] ?? 0, maxX = xExtent[1] ?? 0;
+    const maxY = yExtent[1] ?? 0;
+
+    const PAD_Y = 24;
+    const height = Math.ceil((maxX - minX) + PAD_Y*2);
+    const width  = Math.ceil(maxY + RIGHT_GUTTER);
+
+    svg.attr('width',  width  + margin.left + margin.right)
+       .attr('height', height + margin.top  + margin.bottom);
+
+// after svg.attr('width'...).attr('height'...) inside update()
+const wrapperEl = document.getElementById(svgId)?.closest('.tree-container-wrapper');
+if (wrapperEl) {
+  const svgW  = width  + margin.left + margin.right;
+  const svgH  = height + margin.top  + margin.bottom;
+  const wrapW = wrapperEl.clientWidth;
+  const wrapH = wrapperEl.clientHeight;
+
+  const overflowsX = svgW > wrapW;
+  const overflowsY = svgH > wrapH;
+
+  // center small content via flex; align to start on overflowing axes
+  wrapperEl.style.justifyContent = overflowsX ? 'flex-start' : 'center';
+  wrapperEl.style.alignItems     = overflowsY ? 'flex-start' : 'center';
+
+  // scroll-center once so we don't fight the user later
+  if (!wrapperEl.dataset.centered) {
+    if (overflowsX) wrapperEl.scrollLeft = Math.max(0, Math.floor((svgW - wrapW) / 2));
+    if (overflowsY) wrapperEl.scrollTop  = Math.max(0, Math.floor((svgH - wrapH) / 2));
+    wrapperEl.dataset.centered = '1';
+  }
+}
+
+
+    // make the slide tall enough & notify Swiper
+    const slideEl = document.getElementById(svgId)?.closest('.swiper-slide');
+
+    // ----- nodes -----
+    const nodeSel = g.selectAll('g.node').data(visNodes, d => d.id || (d.id = ++__nodeIdCounter));
+
+    const nodeEnter = nodeSel.enter().append('g')
       .attr('class','node')
       .attr('transform', d => `translate(${source.y0},${source.x0})`)
       .on('click', d => {
@@ -776,40 +888,39 @@ function drawTree (svgId, treeData){
       .attr('dy','.35em')
       .attr('x', d => (d.children || d._children) ? -12 : 12)
       .attr('text-anchor', d => (d.children || d._children) ? 'end' : 'start')
+      .style('font-size', `${FONT_PX}px`)
       .text(d => d.data.name);
 
-    const nodeUpdate = nodeEnter.merge(node);
-    nodeUpdate.transition().duration(350)
+    const nodeUpdate = nodeEnter.merge(nodeSel);
+    nodeUpdate.transition().duration(300)
       .attr('transform', d => `translate(${d.y},${d.x})`);
 
     nodeUpdate.select('circle')
-      .attr('r', 6)
+      .attr('r', CIRCLE_R)
       .style('stroke', d => (!d.children && !d._children) ? '#2e7d32' : 'steelblue')
       .style('fill',   d => (!d.children && !d._children) ? '#e8f5e9' : '#fff');
 
-    node.exit().transition().duration(300)
+    nodeSel.exit().transition().duration(250)
       .attr('transform', d => `translate(${source.y},${source.x})`)
-      .remove()
-      .select('circle').attr('r', 1e-6);
+      .remove();
 
-    const link = g.selectAll('path.link').data(links, d => d.target.id);
+    // ----- links -----
+    const linkSel = g.selectAll('path.link').data(visLinks, d => d.target.id);
 
-    link.enter().insert('path','g')
-        .attr('class','link')
-        .attr('d', d => {
-          const o = {x: source.x0, y: source.y0};
-          return elbow(o,o);
-        })
-      .merge(link).transition().duration(350)
-        .attr('d', d => elbow(d.source, d.target));
+    linkSel.enter().insert('path','g')
+      .attr('class','link')
+      .style('stroke-width', LINK_W)
+      .attr('d', d => { const o = {x: source.x0, y: source.y0}; return elbow(o,o); })
+      .merge(linkSel).transition().duration(300)
+      .style('stroke-width', LINK_W)
+      .attr('d', d => elbow(d.source, d.target));
 
-    link.exit().transition().duration(300)
-        .attr('d', d => {
-          const o = {x: source.x, y: source.y};
-          return elbow(o,o);
-        }).remove();
+    linkSel.exit().transition().duration(250)
+      .attr('d', d => { const o = {x: source.x, y: source.y}; return elbow(o,o); })
+      .remove();
 
-    nodes.forEach(d => { d.x0 = d.x; d.y0 = d.y; });
+    // stash positions for next tween
+    visNodes.forEach(d => { d.x0 = d.x; d.y0 = d.y; });
   }
 
   function elbow(s,d){
@@ -842,7 +953,7 @@ function buildAllTrees(){
   Object.keys(mapping).forEach(id => {
     drawTree(id, mapping[id]);
     const wrapper = document.getElementById(id).closest('.tree-container-wrapper');
-    attachHorizontalScrollButtons(wrapper);
+    // attachHorizontalScrollButtons(wrapper);
   });
 }
 
@@ -866,18 +977,24 @@ let taxonomySwiper;
 
 document.addEventListener('DOMContentLoaded', () => {
   taxonomySwiper = new Swiper('.mySwiper', {
-    slidesPerView: 1,
-    spaceBetween: 30,
-    autoHeight: true,
-    observer: true,
-    observeParents: true,
-    on: {
-      slideChange: () => {
-        setActiveTab(taxonomySwiper.activeIndex);
-        buildTreeForIndex(taxonomySwiper.activeIndex);
-      }
+  slidesPerView: 1,
+  spaceBetween: 30,
+  autoHeight: true,
+  observer: true,
+  observeParents: true,
+
+  // ⬇️ important for mobile: don't hijack touches meant for inner scrollers
+  nested: true,
+  touchStartPreventDefault: false,
+  passiveListeners: true,
+
+  on: {
+    slideChange: () => {
+      setActiveTab(taxonomySwiper.activeIndex);
+      buildTreeForIndex(taxonomySwiper.activeIndex);
     }
-  });
+  }
+});
 
   // ----- MAIN TAXONOMY TABS (Camera | Lighting | Setup | Events) -----
   const mainTabList = document.querySelector('.hero.teaser .taxonomy-tabs[aria-label="Taxonomies"]');
