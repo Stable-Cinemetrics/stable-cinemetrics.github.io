@@ -98,6 +98,42 @@
   color: #3b3b3b;
   margin-top: .15rem;
 }
+  /* Two-row, tidy pills for Positive Cases */
+.taxonomy-tabs--2rows{
+  display: grid;                      /* instead of flex */
+  grid-template-columns: repeat(5, max-content); /* 10 cats -> 2 rows of 5 */
+  justify-content: center;
+  gap: .5rem .6rem;
+  margin-top: .75rem;
+  padding: .25rem 0;
+}
+
+.taxonomy-tabs--2rows .taxonomy-tab{
+  flex: none;                   /* no stretching */
+  white-space: nowrap;          /* keep labels intact */
+  padding: .5rem .9rem;         /* slightly smaller than main tabs */
+  font-size: .95rem;
+  border-radius: 9999px;        /* always pill */
+}
+
+/* Tablet: allow 4 per row */
+@media (max-width: 1024px){
+  .taxonomy-tabs--2rows{
+    grid-template-columns: repeat(4, max-content);
+  }
+}
+/* Mobile: let them auto-wrap; center */
+@media (max-width: 640px){
+  .taxonomy-tabs--2rows{
+    grid-template-columns: repeat(2, 1fr); /* two per row, equal width */
+    gap: .5rem;
+  }
+  .taxonomy-tabs--2rows .taxonomy-tab{
+    justify-self: center;       /* keep pills centered in each cell */
+    width: max-content;
+  }
+}
+
 
 /* Hide sidebar ToC while hero is in view (desktop only) */
 #page-toc.toc-hidden{
@@ -239,7 +275,7 @@
     .video-results-swiper .caption { margin-top: 0.5rem; font-style: italic; color: #555; }
     .video-results-swiper video { max-width: 100%; height: auto; border-radius: 8px; }
 
-    .caption--simple { margin-top: .25rem; font-weight: 600; }
+    .caption--simple { margin-top: .25rem; font-weight: 600; text-align: center;}
     .caption--breadcrumb { margin-top: .1rem; font-size: .9rem; color: #777; }
     .caption--breadcrumb .divider { margin: 0 .35rem; opacity: .6; }
 
@@ -379,12 +415,32 @@
             </div>
 
           <br>
-          <span class="link-block">
-            <a href="#" class="button is-normal is-rounded is-dark" style="height: 2.25em; display: inline-flex; align-items: center;">
-              <span class="icon"><i class="ai ai-arxiv"></i></span>
-              <span>Paper</span>
-            </a>
-          </span>
+          <div class="buttons is-centered" style="gap:.5rem">
+          <!-- Paper (PDF) -->
+          <a href="assets/Stable_Cinemetrics.pdf" class="button is-dark is-rounded"
+            target="_blank" rel="noopener" aria-label="Open PDF">
+            <span class="icon"><i class="fas fa-file-pdf"></i></span>
+            <span>Paper</span>
+          </a>
+
+          <!-- arXiv -->
+          <a href="https://arxiv.org/abs/1234.56789" class="button is-dark is-rounded"
+            target="_blank" rel="noopener" aria-label="Open arXiv">
+            <span class="icon"><i class="ai ai-arxiv"></i></span>
+            <span>arXiv</span>
+          </a>
+
+          <!-- Video -->
+          <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="button is-dark is-rounded"
+            target="_blank" rel="noopener" aria-label="Watch video">
+            <span class="icon"><i class="fas fa-video"></i></span>
+            <span>Video</span>
+          </a>
+        </div>
+
+        <p class="publication-venue has-text-centered is-size-4" style="margin-top:.5rem;">
+          NeurIPS 2025
+        </p>
 
 
           </div>
@@ -402,7 +458,7 @@
         </h4>
         
         <p class="tax-hint has-text-centered">
-          <span class="is-hidden-touch">Hover nodes for details</span>
+          <span class="is-hidden-touch">Hover over nodes for details</span>
           <span class="is-hidden-desktop">Desktop recommended • Tap nodes for details</span>
         </p>
 
@@ -572,6 +628,7 @@
     </section>
 
     <!-- ═══════════ Pairwise Model Comparisons ═══════════ -->
+
     <section id="pairwise" class="space-y-6">
       <h2 class="title is-4 has-text-centered">Pairwise Model Comparisons</h2>
       <p id="desc-pairwise" class="max-w-3xl mx-auto has-text-centered has-text-grey"></p>
@@ -592,6 +649,19 @@
       </details>
     </section>
 
+    <!-- ═══════════ Positive Cases by Taxonomy Nodes ═══════════ -->
+    <section id="pos-taxonomy" class="space-y-6">
+      
+      <h2 class="title is-4 has-text-centered">Positive Cases by Taxonomy Nodes</h2>
+       <div id="pos-cats"
+     class="taxonomy-tabs taxonomy-tabs--2rows"
+     role="tablist"
+     aria-label="Taxonomy categories"></div>
+
+      <!-- 3-up video grid -->
+      <div id="pos-grid" class="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-3"></div>
+    </section>
+
     </div>
   </section>
 
@@ -601,62 +671,19 @@
       <div class="columns is-centered">
         <div class="column is-four-fifths has-text-centered">
           <h2 class="title is-3">Quantitative Results</h2>
-          <div class="content has-text-justified">
-            <p>We evaluate 10+ state of the art models with 80+ film professionals. Each annotator was shown a prompt along with two generated video samples. 
-              For each prompt, they were presented with taxonomy derived evaluation categories and corresponding questions. A total of ~250k annotations were collected.</p>
+          <!-- Quant figures navigator -->
+          <div id="quant-nav"
+              class="taxonomy-tabs taxonomy-tabs--2rows"
+              role="tablist"
+              aria-label="Quantitative figures">
           </div>
-          <div class="swiper human-eval-swiper" style="margin-top: 2rem;">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide">
-                <figure class="image">
-                  <img src="static/images/results/elo.png" alt="Result 1" loading="lazy">
-                </figure>
-                <div class="caption">ELO rankings of models across the 4 taxonomy pillars.</div>
-              </div>
-              <div class="swiper-slide">
-                <figure class="image">
-                  <img src="static/images/results/scine_scripts.png" alt="Result 2" loading="lazy">
-                </figure>
-                <div class="caption">Overall Results on Scine Scripts. Minimax and Wan 14B emerge as the strongest models. </div>
-              </div>
-              <div class="swiper-slide">
-                <figure class="image">
-                  <img src="static/images/results/scine_visuals.png" alt="Result 3" loading="lazy">
-                </figure>
-                <div class="caption">Overall Results on Scine Visuals. Current models perform better at Setup and Lighting, in comparison to Events and Camera.</div>
-              </div>
-              <div class="swiper-slide">
-                <figure class="image">
-                  <img src="static/images/results/emotions.png" alt="Result 4" loading="lazy">
-                </figure>
-                <div class="caption">Implicit Emotions are portrayed better than Explicit ones. On average, Remorse is portrayed most effectively, while Aggressiveness remains the most challenging to depict.
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <figure class="image">
-                  <img src="static/images/results/events_actions.png" alt="Result 5" loading="lazy">
-                </figure>
-                <div class="caption">Atomic actions are handled better than Causal and Overlapping actions in current models.</div>
-              </div>
-              <div class="swiper-slide">
-                <figure class="image">
-                  <img src="static/images/results/lighting_camera.png" alt="Result 6" loading="lazy">
-                </figure>
-                <div class="caption">Lighting Position remains a bottleneck for current models. 
-                  In Camera, Creative Intent is handled well whereas Extrinsics has lower scores on average.
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <figure class="image">
-                  <img src="static/images/results/camera_angle.png" alt="Result 7" loading="lazy">
-                </figure>
-                <div class="caption">The Dutch Camera Angle poses a common challenge to current video generative models.
-                </div>
-              </div>
-            </div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-          </div>
+
+          <!-- One figure that we swap by button -->
+          <figure id="quant-figure" class="image" style="margin-top:1rem;">
+            <img id="quant-img" src="" alt="" loading="lazy" />
+            <figcaption id="quant-cap" class="caption" style="text-align:center;"></figcaption>
+          </figure>
+
         </div>
       </div>
     </div>
@@ -671,7 +698,7 @@
         <div class="column is-four-fifths has-text-centered">
           <h2 class="title is-3">Automatic Evaluation of Professional Videos</h2>
           <div class="content has-text-justified">
-            <p>We also develop a Vision-Language Model that surpasses baseline models in alignment with expert annotations for evaluating professional video generation.</p>
+            <p>Our Vision-Language Model surpasses baseline models in alignment with expert annotations for evaluating professional video generation.</p>
           </div>
           <div class="column">
             <img src="assets/images/vlm.png" alt="Automatic Evaluation Graph" loading="lazy">
@@ -688,12 +715,37 @@
         <div class="column is-four-fifths has-text-centered">
           <h2 class="title is-3">Acknowledgements</h2>
           <div class="content has-text-justified">
-            <p>We thank Robert Legato, Hanno Basse and Heather Ferreira for their valuable input on our work. We are also grateful to the team at MovieLabs for their feedback on our taxonomies. A special thanks to Cedric Wagrez for his invaluable assistance with the annotations! </p>
+            <p>We thank Robert Legato, Hanno Basse and Heather Ferreira for their valuable input on our work. We are also grateful to the team at MovieLabs for their feedback on our taxonomies. A special thanks to Cedric Wagrez for his invaluable assistance human annotations! </p>
           </div>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- BibTeX -->
+<section class="section section-box" id="bibtex">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered">BibTeX</h2>
+
+        <div class="is-flex is-justify-content-flex-end">
+          <button id="copy-bibtex" class="button is-light is-small">
+            Copy
+          </button>
+        </div>
+
+        <pre id="bibtex-entry" class="has-background-light p-3" style="white-space:pre; overflow:auto;"><code>@inproceedings{chatterjee2025stablecinemetrics,
+            title     = {Stable Cinemetrics: Structured Taxonomy and Evaluation for Professional Video Generation},
+            author    = {Agneet Chatterjee and Rahim Entezari and Maksym Zhuravinskyi and Max Lapin and Reshinth Adithyan and Amit Raj and Chitta Baral and Yezhou Yang and Varun Jampani},
+            booktitle = {NeurIPS},
+            year      = {2025},
+            note      = {Project page: https://stable-cinemetrics.github.io/}
+          }</code></pre>
+                </div>
+              </div>
+            </div>
+          </section>
 
   <div id="tooltip" class="tooltip"></div>
 
@@ -712,6 +764,126 @@
   <!-- D3 + Swiper -->
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+<script>
+// Base folder for all PNGs
+const QUANT_BASE = 'assets/images/quant_results/';
+
+// List every result you want to expose here
+const QUANT_ITEMS = [
+  { key: 'elo',            file: 'elo.png',
+    label: 'Model ELO Rankings',
+    cap: 'ELO rankings of models across the 4 taxonomy pillars.' },
+
+  { key: 'scripts',        file: 'scine_scripts.png',
+    label: 'SCINE Scripts (Overall)',
+    cap: 'Overall results on SCINE Scripts. Minimax and Wan 14B emerge as the strongest models.' },
+
+  { key: 'visuals',        file: 'scine_visuals.png',
+    label: 'SCINE Visuals (Overall)',
+    cap: 'Overall results on SCINE Visuals. Models perform better at Setup and Lighting in comparison to Events and Camera.' },
+
+  { key: 'events_actions', file: 'events_actions.png',
+    label: 'Actions',
+    cap: 'Atomic actions are handled better than causal and overlapping actions.' },
+
+  { key: 'emotions',       file: 'emotions.png',
+    label: 'Emotions',
+    cap: 'Implicit emotions outperform explicit ones; Remorse is strongest, Aggressiveness is most challenging.' },
+
+  { key: 'lighting_camera', file: 'lighting_camera.png',
+    label: 'Lighting & Camera',
+    cap: 'Lighting Position and Advanced Controls remain a bottleneck' },
+
+  { key: 'camera_angle',   file: 'camera_angle.png',
+    label: 'Camera Angle',
+    cap: 'The Dutch angle is a common failure case across models.' },
+
+  { key: 'cine_shot_size',   file: 'cine_shot_size.png',
+    label: 'Camera Shot Size',
+    cap: 'Models perform well on Master and Establishing shots and struggle at medium-wide and extreme-close-up shots.' },
+
+    { key: 'time_of_day',   file: 'time_of_day.png',
+    label: 'Time of Day',
+    cap: 'Across Time of Day setups, Sunrise shots are handled better, while Afternoon remains more challenging for models.' },
+
+    { key: 'genres',   file: 'genres.png',
+    label: 'Genres',
+    cap: 'Portrayal of Events in Biography and Adventure are the strongest, while Comedy and Horror are the weakest.' },
+];
+
+document.addEventListener('DOMContentLoaded', () => {
+  const nav = document.getElementById('quant-nav');
+  const img = document.getElementById('quant-img');
+  const cap = document.getElementById('quant-cap');
+
+  if (!nav || !img || !cap) return;
+
+  // Build pills
+  nav.innerHTML = QUANT_ITEMS.map((it, i) => `
+    <button class="taxonomy-tab${i===0 ? ' is-active':''}"
+            role="tab"
+            aria-selected="${i===0 ? 'true':'false'}"
+            data-key="${it.key}">
+      ${it.label}
+    </button>
+  `).join('');
+
+  // Render helper
+  function showItem(key){
+    const it = QUANT_ITEMS.find(x => x.key === key) || QUANT_ITEMS[0];
+    img.src = QUANT_BASE + it.file;
+    img.alt = it.label;
+    cap.textContent = it.cap || '';
+  }
+
+  // Default: first item
+  showItem(QUANT_ITEMS[0].key);
+
+  // Click handling + aria states
+  nav.addEventListener('click', (e) => {
+    const btn = e.target.closest('.taxonomy-tab[data-key]');
+    if (!btn) return;
+
+    [...nav.querySelectorAll('.taxonomy-tab')].forEach(b => {
+      const active = b === btn;
+      b.classList.toggle('is-active', active);
+      b.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+
+    showItem(btn.dataset.key);
+  });
+});
+</script>
+
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const btn  = document.getElementById('copy-bibtex');
+  const pre  = document.getElementById('bibtex-entry');
+  if (!btn || !pre) return;
+
+  btn.addEventListener('click', async () => {
+    const text = pre.innerText;
+    try {
+      await navigator.clipboard.writeText(text);
+      const old = btn.textContent;
+      btn.textContent = 'Copied!';
+      setTimeout(() => (btn.textContent = old), 1200);
+    } catch {
+      // Fallback
+      const sel = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(pre);
+      sel.removeAllRanges(); sel.addRange(range);
+      document.execCommand('copy');
+      sel.removeAllRanges();
+      const old = btn.textContent;
+      btn.textContent = 'Copied!';
+      setTimeout(() => (btn.textContent = old), 1200);
+    }
+  });
+});
+</script>
 
   <script>
 /* -------------------------------------------------------------
@@ -758,6 +930,8 @@ function buildTreeForIndex(idx){
   const wrapper = document.getElementById(id).closest('.tree-container-wrapper');
   // attachHorizontalScrollButtons(wrapper);
 }
+
+function capFirst(s){ return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
 
 function drawTree (svgId, treeData){
   const svg     = d3.select('#'+svgId).html('');
@@ -1348,6 +1522,91 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
   </script>
+<script>
+
+const POS_DATA = {
+  actions: ['cyclic.mp4', 'concurrent.mp4', 'causal.mp4'],
+  camera_angle: ['aerial.mp4','ground.mp4','low.mp4'],
+  camera_shot_size: ['medium_close_up.mp4','medium.mp4','wide.mp4'],
+  elements: ['foggy_pier.mp4','fresh_snow.mp4','undulating_dust.mp4'],
+  emotions: ['eyes_filling_with_tears.mp4','stopping_to_share_a_laugh.mp4','visibly_upset_toddler.mp4'],
+  geometry: ['symmetric_framing.mp4','triangular_spires.mp4','vertical_shelves.mp4'],
+  lighting_effects: ['backlit_reflections.mp4','long_diagonal_shadows.mp4','reflections.mp4'],
+  lighting_source: ['fluorescent_lit_hallway.mp4','overhead_pendant_lamps.mp4','sunlight.mp4'],
+  props: ['goofy_apron_patterned_with_geometric_grids.mp4','stone_walls_bear_water_stains_and_a_grotesque_mural.mp4','woven_wicker_basket.mp4'],
+  text_generation: ['enter_oblivion.mp4','guiding_light.mp4','one_year_later.mp4']
+};
+
+const POS_LABEL = {
+  actions: 'Actions',
+  camera_angle: 'Camera Angle',
+  camera_shot_size: 'Camera Shot Size',
+  elements: 'Elements',
+  emotions: 'Emotions',
+  geometry: 'Geometry',
+  lighting_effects: 'Lighting Effects',
+  lighting_source: 'Lighting Source',
+  props: 'Props',
+  text_generation: 'Text Generation'
+};
+
+(function initPosOnly(){
+  const catsWrap = document.getElementById('pos-cats');
+  const grid     = document.getElementById('pos-grid');
+  if (!catsWrap || !grid) return;
+
+  const catKeys = Object.keys(POS_DATA);
+  let currentCat = catKeys[0];
+
+  // helper: filename -> title case label
+  const titleFromFilename = (f) =>
+    (f||'').replace(/\.[^.]+$/,'').replace(/[_-]+/g,' ').trim()
+           .replace(/\b\w/g, c => c.toUpperCase());
+
+  // Build category pills
+  catsWrap.innerHTML = catKeys.map((k,i)=>`
+    <button class="taxonomy-tab${i===0?' is-active':''}" role="tab"
+            aria-selected="${i===0?'true':'false'}" data-cat="${k}">
+      ${POS_LABEL[k] || k}
+    </button>
+  `).join('');
+
+  catsWrap.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.taxonomy-tab[data-cat]');
+    if(!btn) return;
+    currentCat = btn.dataset.cat;
+    [...catsWrap.querySelectorAll('.taxonomy-tab')].forEach(b=>{
+      const active = b===btn;
+      b.classList.toggle('is-active', active);
+      b.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    render();
+  });
+
+  function render(){
+    const files = POS_DATA[currentCat] || [];
+    const base  = `assets/positive/${currentCat}/`;  // ✅ correct folder name
+
+    grid.innerHTML = files.slice(0,3).map(f=>`
+      <figure class="w-full border border-gray-200 rounded overflow-hidden bg-white">
+        <video
+          src="${base}${f}"
+          muted playsinline loop
+          class="object-cover w-full h-52 md:h-60"
+          onmouseenter="this.play()" onfocus="this.play()"
+          onloadedmetadata="this.play().catch(()=>{})"></video>
+        <figcaption class="caption--simple">${titleFromFilename(f)}</figcaption>
+      </figure>
+    `).join('');
+
+    grid.querySelectorAll('video').forEach(v=>v.play().catch(()=>{}));
+  }
+
+  render();
+})();
+</script>
+
+
   <script>
 (() => {
   /* ---------------- Section Descriptions ---------------- */
@@ -1497,6 +1756,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderS();
   renderV();
 })();
+
 </script>
 
 <script>
@@ -1520,7 +1780,8 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 'qualitative', label: 'Qualitative Results' },
     { id: 'quantitative',label: 'Quantitative Results' },
     { id: 'vlm',         label: 'Automatic Evaluator' },
-    { id: 'ack',         label: 'Acknowledgements' }
+    { id: 'ack',         label: 'Acknowledgements' },
+    { id: 'bibtex',      label: 'BibTeX' }
   ].filter(x => document.getElementById(x.id)); // only include existing sections
 
   list.innerHTML = items
