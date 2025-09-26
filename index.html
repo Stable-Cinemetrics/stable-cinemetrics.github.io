@@ -33,6 +33,26 @@
   <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 
   <style>
+    /* Podcast player: centered pill container */
+.podcast-audio-wrap{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.25rem;   /* center the wrapper */
+  padding: 1.25rem 1.2rem;
+  max-width: 680px;
+  background: #f3f4f6;
+  border-radius: 9999px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.06);
+}
+.podcast-audio-wrap audio{
+  width: 100%;
+  max-width: 640px;
+  display: block;
+  margin: 0 auto;           /* centers the audio element */
+  outline: none;
+}
+
     :root { --bulma-link-h-l: 21; --bulma-link-s-l: 71; }
 
     /* Wider taxonomy box only */
@@ -436,7 +456,16 @@
             <span class="icon"><i class="fas fa-video"></i></span>
             <span>Video</span>
           </a>
+
+          <a href="#podcast" class="button is-dark is-rounded" aria-label="Open podcast section">
+          <span class="icon"><i class="fas fa-podcast"></i></span>
+          <span>Podcast</span>
+          </a>
         </div>
+
+        <!-- Podcast (jumps to the section below) -->
+
+
 
         <p class="publication-venue has-text-centered is-size-4" style="margin-top:.5rem;">
           NeurIPS 2025
@@ -552,14 +581,14 @@
         <div class="column is-four-fifths has-text-centered">
           <h2 class="title is-3">The Stable Cinemetrics Benchmark</h2>
           <div class="content has-text-justified">
-            <p>To reflect real world professional workflows, we develop SCINE Scripts and Visuals by sampling control nodes from our defined taxonomies.</p>
+            <p class="is-size-5" style="margin-bottom:1.25rem;">To reflect real world professional workflows, we develop SCINE Scripts and Visuals by sampling control nodes from our defined taxonomies.</p>
           </div>
           <div class="column">
             <img src="assets/images/pipeline.png" alt="Overall Pipeline" loading="lazy">
           </div>
 
           <div class="content has-text-justified">
-            <p>In SCINE prompts, each control node is categorized, and specific questions are generated for every node, enabling focused and independent evaluation of each cinematic aspect.</p>
+            <p class="is-size-5" style="margin-bottom:1.25rem;">In SCINE prompts, each control node is categorized, and specific questions are generated for every node, enabling focused and independent evaluation of each cinematic aspect.</p>
           </div>
 
           <!-- NEW: Independent image toggle tabs -->
@@ -698,7 +727,7 @@
         <div class="column is-four-fifths has-text-centered">
           <h2 class="title is-3">Automatic Evaluation of Professional Videos</h2>
           <div class="content has-text-justified">
-            <p>Our Vision-Language Model surpasses baseline models in alignment with expert annotations for evaluating professional video generation.</p>
+            <p class="is-size-5" style="margin-bottom:1.25rem;">Our Vision-Language Model surpasses baseline models in alignment with expert annotations for evaluating professional video generation.</p>
           </div>
           <div class="column">
             <img src="assets/images/vlm.png" alt="Automatic Evaluation Graph" loading="lazy">
@@ -708,6 +737,34 @@
     </div>
   </section>
 
+<!-- Podcast -->
+<section class="section section-box" id="podcast">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths has-text-centered">
+        <h2 class="title is-3">Podcast</h2>
+
+        <!-- Rounded audio player container -->
+        <p class="is-size-5 has-text-centered" style="margin-bottom:1.25rem;">
+  Prefer listening? Get the key ideas in this short podcast overview of the paper.
+</p>
+
+<div class="podcast-audio-wrap">
+  <audio controls preload="metadata">
+    <source src="assets/podcast.mp4" type="audio/mp4">
+    Your browser does not support the audio element.
+  </audio>
+</div>
+
+
+        <p class="has-text-grey is-size-6" style="margin-top:.5rem;">
+          Prefer offline? <a href="assets/podcast.mp4" download>Download the episode</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
   <!-- Ack -->
   <section class="section section-box" id="ack">
     <div class="container is-max-desktop">
@@ -715,7 +772,7 @@
         <div class="column is-four-fifths has-text-centered">
           <h2 class="title is-3">Acknowledgements</h2>
           <div class="content has-text-justified">
-            <p>We thank Robert Legato, Hanno Basse and Heather Ferreira for their valuable input on our work. We are also grateful to the team at MovieLabs for their feedback on our taxonomies. A special thanks to Cedric Wagrez for his invaluable assistance human annotations! </p>
+            <p class="is-size-5" style="margin-bottom:1.25rem;">We thank Robert Legato, Hanno Basse and Heather Ferreira for their valuable input on our work. We are also grateful to the team at MovieLabs for their feedback on our taxonomies. A special thanks to Cedric Wagrez for his invaluable assistance human annotations! </p>
           </div>
         </div>
       </div>
@@ -1780,6 +1837,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 'qualitative', label: 'Qualitative Results' },
     { id: 'quantitative',label: 'Quantitative Results' },
     { id: 'vlm',         label: 'Automatic Evaluator' },
+    { id: 'podcast',     label: 'Podcast' },   
     { id: 'ack',         label: 'Acknowledgements' },
     { id: 'bibtex',      label: 'BibTeX' }
   ].filter(x => document.getElementById(x.id)); // only include existing sections
