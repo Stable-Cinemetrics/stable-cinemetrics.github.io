@@ -53,6 +53,26 @@
   outline: none;
 }
 
+.youtube-video-wrap {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+  height: 0;
+  overflow: hidden;
+  max-width: 100%;
+  background: #000;
+  border-radius: 8px;
+  margin: 1.5rem auto;
+  box-shadow: 0 6px 18px rgba(0,0,0,.06);
+}
+.youtube-video-wrap iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
     :root { --bulma-link-h-l: 21; --bulma-link-s-l: 71; }
 
     /* Wider taxonomy box only */
@@ -451,9 +471,8 @@
           </a>
 
           <!-- Video -->
-          <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="button is-dark is-rounded"
-            target="_blank" rel="noopener" aria-label="Watch video">
-            <span class="icon"><i class="fas fa-video"></i></span>
+          <a href="#video-overview" class="button is-dark is-rounded" aria-label="Watch embedded video">
+            <span class="icon"><i class="fab fa-youtube"></i></span>
             <span>Video</span>
           </a>
 
@@ -737,6 +756,29 @@
     </div>
   </section>
 
+  <section class="section section-box" id="video-overview">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths has-text-centered">
+        <h2 class="title is-3">Video Overview</h2>
+        <p class="is-size-5 has-text-centered" style="margin-bottom:1.25rem;">
+          Watch a summary of the paper and its key contributions.
+        </p>
+        <div class="youtube-video-wrap">
+          <iframe src="https://www.youtube.com/embed/jJ4qwSK3t-8"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+        <p class="has-text-grey is-size-6" style="margin-top:.5rem;">
+          Prefer to watch on YouTube? <a href="https://www.youtube.com/watch?v=jJ4qwSK3t-8" target="_blank" rel="noopener">Open in a new tab</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- Podcast -->
 <section class="section section-box" id="podcast">
   <div class="container is-max-desktop">
@@ -772,7 +814,7 @@
         <div class="column is-four-fifths has-text-centered">
           <h2 class="title is-3">Acknowledgements</h2>
           <div class="content has-text-justified">
-            <p class="is-size-5" style="margin-bottom:1.25rem;">We thank Robert Legato, Hanno Basse and Heather Ferreira for their valuable input on our work. We are also grateful to the team at MovieLabs for their feedback on our taxonomies. A special thanks to Cedric Wagrez for his invaluable assistance human annotations! </p>
+            <p class="is-size-5" style="margin-bottom:1.25rem;">We thank Robert Legato, Hanno Basse and Heather Ferreira for their valuable input on our work. We are also grateful to the team at MovieLabs for their feedback on our taxonomies. A special thanks to Cedric Wagrez for his assistance with the human annotations! </p>
           </div>
         </div>
       </div>
@@ -1830,17 +1872,18 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!toc || !list) return;
 
   const items = [
-    { id: 'overview',    label: 'Overview' },
-    { id: 'taxonomies',  label: 'Taxonomies' },
-    { id: 'abstract',    label: 'Abstract' },
-    { id: 'benchmark',   label: 'Benchmark' },
-    { id: 'qualitative', label: 'Qualitative Results' },
-    { id: 'quantitative',label: 'Quantitative Results' },
-    { id: 'vlm',         label: 'Automatic Evaluator' },
-    { id: 'podcast',     label: 'Podcast' },   
-    { id: 'ack',         label: 'Acknowledgements' },
-    { id: 'bibtex',      label: 'BibTeX' }
-  ].filter(x => document.getElementById(x.id)); // only include existing sections
+  { id: 'overview',     label: 'Overview' },
+  { id: 'taxonomies',   label: 'Taxonomies' },
+  { id: 'abstract',     label: 'Abstract' },
+  { id: 'benchmark',    label: 'Benchmark' },
+  { id: 'qualitative',  label: 'Qualitative Results' },
+  { id: 'quantitative', label: 'Quantitative Results' },
+  { id: 'vlm',          label: 'Automatic Evaluator' },
+  { id: 'video-overview',label: 'Video Overview' },
+  { id: 'podcast',      label: 'Podcast' },   
+  { id: 'ack',          label: 'Acknowledgements' },
+  { id: 'bibtex',       label: 'BibTeX' }
+].filter(x => document.getElementById(x.id));
 
   list.innerHTML = items
     .map(x => `<li><a href="#${x.id}" data-target="${x.id}">${x.label}</a></li>`)
